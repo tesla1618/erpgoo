@@ -313,45 +313,54 @@
 
                         @if($show_dashboard == 1)
                         @if( Gate::check('manage project'))
-                            <li class="dash-item dash-hasmenu {{ ( Request::segment(1) == 'project' || Request::segment(1) == 'bugs-report' || Request::segment(1) == 'bugstatus' || Request::segment(1) == 'project-task-stages' || Request::segment(1) == 'calendar' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'project' || Request::segment(1) == 'projects' || Request::segment(1) == 'project_report')
-                            ? 'active dash-trigger' : ''}}">
-                                <a href="#!" class="dash-link"
-                                ><span class="dash-micon"><i class="ti ti-share"></i></span
-                                    ><span class="dash-mtext">{{__('Vendors')}}</span
-                                    ><span class="dash-arrow"><i data-feather="chevron-right"></i></span
-                                    ></a>
-                                <ul class="dash-submenu">
-                                    @can('manage project')
-                                        <li class="dash-item  {{Request::segment(1) == 'project' || Request::route()->getName() == 'projects.list' || Request::route()->getName() == 'projects.list' ||Request::route()->getName() == 'projects.index' || Request::route()->getName() == 'projects.show' || request()->is('projects/*') ? 'active' : ''}}">
-                                            <a class="dash-link" href="{{route('projects.index')}}">{{__('Work Permit Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage project task')
-                                        <li class="dash-item {{ (request()->is('taskboard*') ? 'active' : '')}}">
-                                            <a class="dash-link" href="{{ route('taskBoard.view', 'list') }}">{{__('Student Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage timesheet')
-                                        <li class="dash-item {{ (request()->is('timesheet-list*') ? 'active' : '')}}">
-                                            <a class="dash-link" href="{{route('timesheet.list')}}">{{__('Business Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage bug report')
-                                        <li class="dash-item {{ (request()->is('bugs-report*') ? 'active' : '')}}">
-                                            <a class="dash-link" href="{{route('bugs.view','list')}}">{{__('Tourist Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage project task')
-                                        <li class="dash-item {{ (request()->is('calendar*') ? 'active' : '')}}">
-                                            <a class="dash-link" href="{{ route('task.calendar',['all']) }}">{{__('Others')}}</a>
-                                        </li>
-                                    @endcan
-                                    
-                                    @if(Gate::check('manage project task stage') || Gate::check('manage bug status'))
-                                       
-                                    @endif
-                                </ul>
-                            </li>
+                          
+                        <li class="dash-item dash-hasmenu {{ (Request::segment(1) == 'project' || Request::segment(1) == 'bugs-report' || Request::segment(1) == 'bugstatus' || Request::segment(1) == 'project-task-stages' || Request::segment(1) == 'calendar' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'project' || Request::segment(1) == 'projects' || Request::segment(1) == 'project_report') ? 'active dash-trigger' : ''}}">
+                            <a href="#!" class="dash-link">
+                                <span class="dash-micon"><i class="ti ti-share"></i></span>
+                                <span class="dash-mtext">{{__('Vendors')}}</span>
+                                <span class="dash-arrow"><i data-feather="chevron-right"></i></span>
+                            </a>
+                            <ul class="dash-submenu">
+                                <!-- Service Providing Section -->
+                                <li class="dash-item dash-hasmenu {{ (Request::segment(1) == 'service-providing') ? 'active dash-trigger' : ''}}">
+                                    <a href="#!" class="dash-link">
+                                        <span class="dash-mtext">{{__('Service Providing')}}</span>
+                                        <span class="dash-arrow"><i data-feather="chevron-right"></i></span>
+                                    </a>
+                                    <ul class="dash-submenu">
+                                        @can('manage project')
+                                            <li class="dash-item  {{Request::segment(1) == 'project' || Request::route()->getName() == 'projects.list' || Request::route()->getName() == 'projects.list' ||Request::route()->getName() == 'projects.index' || Request::route()->getName() == 'projects.show' || request()->is('projects/*') ? 'active' : ''}}">
+                                                <a class="dash-link" href="{{route('projects.index')}}">{{__('Work Permit Visa')}}</a>
+                                            </li>
+                                        @endcan
+                                        @can('manage project task')
+                                            <li class="dash-item {{ (request()->is('taskboard*') ? 'active' : '')}}">
+                                                <a class="dash-link" href="{{ route('projects.index', 'list') }}">{{__('Student Visa')}}</a>
+                                            </li>
+                                        @endcan
+                                        @can('manage timesheet')
+                                            <li class="dash-item {{ (request()->is('timesheet-list*') ? 'active' : '')}}">
+                                                <a class="dash-link" href="{{route('projects.index')}}">{{__('Business Visa')}}</a>
+                                            </li>
+                                        @endcan
+                                        @can('manage bug report')
+                                            <li class="dash-item {{ (request()->is('bugs-report*') ? 'active' : '')}}">
+                                                <a class="dash-link" href="{{route('projects.index','list')}}">{{__('Tourist Visa')}}</a>
+                                            </li>
+                                        @endcan
+                                        @can('manage project task')
+                                            <li class="dash-item {{ (request()->is('calendar*') ? 'active' : '')}}">
+                                                <a class="dash-link" href="{{ route('projects.index',['all']) }}">{{__('Others')}}</a>
+                                            </li>
+                                        @endcan
+                                    </ul>
+                                </li>
+                                <!-- Ticket Section (Add your options for Ticket here if needed) -->
+                                <li class="dash-item {{ (Request::segment(1) == 'ticket') ? 'active' : ''}}">
+                                    <a class="dash-link" href="{{ route('projects.index') }}">{{__('Ticket')}}</a>
+                                </li>
+                            </ul>
+                        </li>
                         @endif
                     @endif
 
