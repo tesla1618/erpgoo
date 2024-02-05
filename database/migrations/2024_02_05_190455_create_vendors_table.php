@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('company_details');
+            $table->string('attachment')->nullable();
+            $table->boolean('paid')->default(false);
+            $table->dateTime('due')->nullable();
             $table->timestamps();
         });
     }

@@ -131,6 +131,36 @@
                                     </li>
                                 @endif
 
+                                @if($show_dashboard == 1 && Gate::check('show account dashboard'))
+                                    <li class="dash-item dash-hasmenu {{ ( Request::segment(1) == null   || Request::segment(1) == 'report' || Request::segment(1) == 'reports-monthly-cashflow' || Request::segment(1) == 'reports-quarterly-cashflow') ? ' active dash-trigger' : ''}}">
+                                        <a class="dash-link" href="#">{{__('Agents ')}}<span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                        <ul class="dash-submenu">
+                                            @can('show account dashboard')
+                                                <li class="dash-item {{ ( Request::segment(1) == null || Request::segment(1) == 'account-dashboard') ? ' active' : '' }}">
+                                                    <a class="dash-link" href="{{route('dashboard')}}">{{__(' Overview')}}</a>
+                                                </li>
+                                            @endcan
+                                                
+                                        </ul>
+                                    </li>
+                                @endif
+
+                                @if($show_dashboard== 1)
+                                        @can('show hrm dashboard')
+                                            <li class="dash-item dash-hasmenu">
+                                                <a class="dash-link" href="#">{{__('Vendors ')}}<span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                                <ul class="dash-submenu">
+                                                    <li class="dash-item {{ (\Request::route()->getName()=='hrm.dashboard') ? ' active' : '' }}">
+                                                        <a class="dash-link" href="{{route('hrm.dashboard')}}">{{__(' Overview')}}</a>
+                                                    </li>
+                                                    @can('manage report')
+                                                      
+                                                    @endcan
+                                                </ul>
+                                            </li>
+                                        @endcan
+                                @endif
+
                                 
 
                                 @if($show_dashboard== 1)

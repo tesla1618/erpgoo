@@ -131,6 +131,36 @@
                                     </li>
                                 <?php endif; ?>
 
+                                <?php if($show_dashboard == 1 && Gate::check('show account dashboard')): ?>
+                                    <li class="dash-item dash-hasmenu <?php echo e(( Request::segment(1) == null   || Request::segment(1) == 'report' || Request::segment(1) == 'reports-monthly-cashflow' || Request::segment(1) == 'reports-quarterly-cashflow') ? ' active dash-trigger' : ''); ?>">
+                                        <a class="dash-link" href="#"><?php echo e(__('Agents ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                        <ul class="dash-submenu">
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show account dashboard')): ?>
+                                                <li class="dash-item <?php echo e(( Request::segment(1) == null || Request::segment(1) == 'account-dashboard') ? ' active' : ''); ?>">
+                                                    <a class="dash-link" href="<?php echo e(route('dashboard')); ?>"><?php echo e(__(' Overview')); ?></a>
+                                                </li>
+                                            <?php endif; ?>
+                                                
+                                        </ul>
+                                    </li>
+                                <?php endif; ?>
+
+                                <?php if($show_dashboard== 1): ?>
+                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show hrm dashboard')): ?>
+                                            <li class="dash-item dash-hasmenu">
+                                                <a class="dash-link" href="#"><?php echo e(__('Vendors ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                                <ul class="dash-submenu">
+                                                    <li class="dash-item <?php echo e((\Request::route()->getName()=='hrm.dashboard') ? ' active' : ''); ?>">
+                                                        <a class="dash-link" href="<?php echo e(route('hrm.dashboard')); ?>"><?php echo e(__(' Overview')); ?></a>
+                                                    </li>
+                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage report')): ?>
+                                                      
+                                                    <?php endif; ?>
+                                                </ul>
+                                            </li>
+                                        <?php endif; ?>
+                                <?php endif; ?>
+
                                 
 
                                 <?php if($show_dashboard== 1): ?>
