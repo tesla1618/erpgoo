@@ -18,13 +18,16 @@ return new class extends Migration
             $table->string('visa_type')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
             $table->decimal('amount_due', 10, 2)->default(0);
+            $table->boolean('isTicket')->default(0);
             $table->string('status')->default('submitted');
             $table->string('attachment')->nullable();
             $table->unsignedBigInteger('agent_id')->nullable();
+            $table->unsignedBigInteger('vendor_id')->nullable(); // Add vendor foreign key
             $table->timestamps();
         
-            // Define foreign key constraint
+            // Define foreign key constraints
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('set null');
+            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('set null');
         });
     }
 

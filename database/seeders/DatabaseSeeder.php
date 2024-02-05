@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(NotificationSeeder::class);
+        $this->call(UsersTableSeeder::class);
         Artisan::call('module:migrate LandingPage');
         Artisan::call('module:seed LandingPage');
 
