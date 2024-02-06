@@ -21,6 +21,8 @@
 
             // Execute a raw SQL query
             $results = $connection->select("SELECT * FROM clients WHERE agent_id = $aid");
+            $agent_name = $connection->select("SELECT agent_name FROM agents WHERE id = $aid");
+            $agent_name = $agent_name[0]->agent_name;
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the database operation
             echo "Error: " . $e->getMessage();
@@ -133,8 +135,18 @@
         </div>
     </form>
 </div>
-    <div class="row">
+
+    <div class="row mt-4">
         <div class="col-xxl-12">
+            <div class="alert alert-success mb-4">
+                Showing all clients for the agent <b>{{ $agent_name }}</b>
+            </div>
+        <div class="card">
+
+        <div class="card-body table-border-style">
+
+
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -163,6 +175,9 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
+        </div>
+        </div>
         </div>
     </div>
 @endsection

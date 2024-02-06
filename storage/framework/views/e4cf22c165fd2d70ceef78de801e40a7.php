@@ -136,8 +136,13 @@
         </div>
     </form>
 </div>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-xxl-12">
+        <div class="card">
+
+<div class="card-body table-border-style">
+
+    <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -156,6 +161,9 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
+            </div>
+            </div>
+            </div>
         </div>
     </div>
 <?php $__env->stopSection(); ?>
