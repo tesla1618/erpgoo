@@ -269,38 +269,32 @@
 
                     @if($show_dashboard == 1)
                         @if( Gate::check('manage lead') || Gate::check('manage deal') || Gate::check('manage form builder') || Gate::check('manage contract'))
-                            <li class="dash-item dash-hasmenu {{ (Request::segment(1) == 'stages' || Request::segment(1) == 'labels' || Request::segment(1) == 'sources' || Request::segment(1) == 'lead_stages' || Request::segment(1) == 'pipelines' || Request::segment(1) == 'deals' || Request::segment(1) == 'leads'  || Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response' || Request::segment(1) == 'contract') ?' active dash-trigger':''}}">
-                                <a href="#!" class="dash-link"
+                        <li class="dash-item dash-hasmenu{{ Str::contains(request()->url(), '/agents') ? ' active dash-trigger' : '' }}">
+        
+                        <a href="#!" class="dash-link"
                                 ><span class="dash-micon"><i class="ti ti-layers-difference"></i></span
                                     ><span class="dash-mtext">{{__('Agents')}}</span
                                     ><span class="dash-arrow"><i data-feather="chevron-right"></i></span
                                     ></a>
                                 <ul class="dash-submenu {{ (Request::segment(1) == 'stages' || Request::segment(1) == 'labels' || Request::segment(1) == 'sources' || Request::segment(1) == 'lead_stages' || Request::segment(1) == 'leads'  || Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response' || Request::segment(1) == 'deals' || Request::segment(1) == 'pipelines')?'show':''}}">
-                                    @can('manage lead')
-                                        <li class="dash-item {{ (Request::route()->getName() == 'leads.list' || Request::route()->getName() == 'leads.index' || Request::route()->getName() == 'leads.show') ? ' active' : '' }}">
-                                            <a class="dash-link" href="{{ route('leads.index') }}">{{__('Work Permit Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage deal')
-                                        <li class="dash-item {{ (Request::route()->getName() == 'deals.list' || Request::route()->getName() == 'deals.index' || Request::route()->getName() == 'deals.show') ? ' active' : '' }}">
-                                            <a class="dash-link" href="{{route('deals.index')}}">{{__('Student Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @can('manage form builder')
-                                        <li class="dash-item {{ (Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response')?'active open':''}}">
-                                            <a class="dash-link" href="{{route('form_builder.index')}}">{{__('Business Visa')}}</a>
-                                        </li>
-                                    @endcan
-                                    @if(\Auth::user()->type=='company' || \Auth::user()->type=='client')
-                                        <li class="dash-item  {{ (Request::segment(1) == 'contract')?'active':''}}">
-                                            <a class="dash-link" href="{{route('contract.index')}}">{{__('Tourist Visa')}}</a>
-                                        </li>
-                                    @endif
-                                    @if(\Auth::user()->type=='company' || \Auth::user()->type=='client')
-                                        <li class="dash-item  {{ (Request::segment(1) == 'contract2')?'active':''}}">
-                                            <a class="dash-link" href="#">{{__('Others')}}</a>
-                                        </li>
-                                    @endif
+                                    <li class="dash-item {{ request()->fullUrl() == url('/agents?visa_type=WV') ? 'active' : '' }}">
+                                        <a class="dash-link" href="/agents?visa_type=WV">{{ __('Work Permit Visa') }}</a>
+                                    </li>
+
+                                  
+                                    <li class="dash-item {{ request()->fullUrl() == url('/agents?visa_type=SV') ? 'active' : '' }}">
+                                        <a class="dash-link" href="/agents?visa_type=SV">{{__('Student Visa')}}</a>
+                                    </li>
+                                    <li class="dash-item {{ request()->fullUrl() == url('/agents?visa_type=BV') ? 'active' : '' }}">
+                                        <a class="dash-link" href="/agents?visa_type=BV">{{__('Business Visa')}}</a>
+                                    </li>
+                                    <li class="dash-item {{ request()->fullUrl() == url('/agents?visa_type=TV') ? 'active' : '' }}">
+                                        <a class="dash-link" href="/agents?visa_type=TV">{{__('Tourist Visa')}}</a>
+                                    </li>
+                                    <li class="dash-item {{ request()->fullUrl() == url('/agents?visa_type=OV') ? 'active' : '' }}">
+                                        <a class="dash-link" href="/agents?visa_type=OV">{{__('Others')}}</a>
+                                    </li>
+                                    
                                     
                                 </ul>
                             </li>

@@ -269,38 +269,32 @@
 
                     <?php if($show_dashboard == 1): ?>
                         <?php if( Gate::check('manage lead') || Gate::check('manage deal') || Gate::check('manage form builder') || Gate::check('manage contract')): ?>
-                            <li class="dash-item dash-hasmenu <?php echo e((Request::segment(1) == 'stages' || Request::segment(1) == 'labels' || Request::segment(1) == 'sources' || Request::segment(1) == 'lead_stages' || Request::segment(1) == 'pipelines' || Request::segment(1) == 'deals' || Request::segment(1) == 'leads'  || Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response' || Request::segment(1) == 'contract') ?' active dash-trigger':''); ?>">
-                                <a href="#!" class="dash-link"
+                        <li class="dash-item dash-hasmenu<?php echo e(Str::contains(request()->url(), '/agents') ? ' active dash-trigger' : ''); ?>">
+        
+                        <a href="#!" class="dash-link"
                                 ><span class="dash-micon"><i class="ti ti-layers-difference"></i></span
                                     ><span class="dash-mtext"><?php echo e(__('Agents')); ?></span
                                     ><span class="dash-arrow"><i data-feather="chevron-right"></i></span
                                     ></a>
                                 <ul class="dash-submenu <?php echo e((Request::segment(1) == 'stages' || Request::segment(1) == 'labels' || Request::segment(1) == 'sources' || Request::segment(1) == 'lead_stages' || Request::segment(1) == 'leads'  || Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response' || Request::segment(1) == 'deals' || Request::segment(1) == 'pipelines')?'show':''); ?>">
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage lead')): ?>
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'leads.list' || Request::route()->getName() == 'leads.index' || Request::route()->getName() == 'leads.show') ? ' active' : ''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('leads.index')); ?>"><?php echo e(__('Work Permit Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage deal')): ?>
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'deals.list' || Request::route()->getName() == 'deals.index' || Request::route()->getName() == 'deals.show') ? ' active' : ''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('deals.index')); ?>"><?php echo e(__('Student Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage form builder')): ?>
-                                        <li class="dash-item <?php echo e((Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response')?'active open':''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('form_builder.index')); ?>"><?php echo e(__('Business Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if(\Auth::user()->type=='company' || \Auth::user()->type=='client'): ?>
-                                        <li class="dash-item  <?php echo e((Request::segment(1) == 'contract')?'active':''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('contract.index')); ?>"><?php echo e(__('Tourist Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if(\Auth::user()->type=='company' || \Auth::user()->type=='client'): ?>
-                                        <li class="dash-item  <?php echo e((Request::segment(1) == 'contract2')?'active':''); ?>">
-                                            <a class="dash-link" href="#"><?php echo e(__('Others')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents?visa_type=WV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents?visa_type=WV"><?php echo e(__('Work Permit Visa')); ?></a>
+                                    </li>
+
+                                  
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents?visa_type=SV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents?visa_type=SV"><?php echo e(__('Student Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents?visa_type=BV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents?visa_type=BV"><?php echo e(__('Business Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents?visa_type=TV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents?visa_type=TV"><?php echo e(__('Tourist Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents?visa_type=OV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents?visa_type=OV"><?php echo e(__('Others')); ?></a>
+                                    </li>
+                                    
                                     
                                 </ul>
                             </li>

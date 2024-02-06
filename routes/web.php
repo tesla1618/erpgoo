@@ -136,7 +136,38 @@ use App\Http\Controllers\MidtransPaymentController;
 use App\Http\Controllers\ProjectExpenseController;
 use App\Http\Controllers\NepalstePaymnetController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\VendorController;
+use App\Http\Controllers\VClientController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+
+// Route::resource('agents', AgentController::class);
+// Route::resource('vendors', VendorController::class);
+// Route::resource('vclients', VClientController::class);
+
+Route::get('/agents', function () {
+    return view('agents.index');
+    
+});
+
+Route::get('/agents', function (Request $request) {
+    // $visaType = $request->input('visa_type');
+    $agent = $request->input('agent');
+
+    // Check the values of the URL parameters
+    if ($agent) {
+        return view('agents.clients');
+    } else {
+        return view('agents.index');
+    }
+});
+
+// Route::post('/agents/store', 'AgentController@store')->name('agents.store');
+Route::middleware('web')->post('/agents/store', 'AgentController@store')->name('agents.store');
+
+
 
 /*
 |--------------------------------------------------------------------------
