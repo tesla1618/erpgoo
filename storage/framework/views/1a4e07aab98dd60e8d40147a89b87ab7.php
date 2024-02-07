@@ -3,34 +3,29 @@
 
     // Check if 'visa_type' parameter is set in the URL
     $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
-    $aid = isset($_GET['agent']) ? $_GET['agent'] : null;
     $results = [];
     
 
     // Get data from the database based on the 'visa_type' parameter
-    if (!is_null($aid)) {
+    if (!is_null($vtype)) {
         try {
             // Establish a database connection
             $connection = DB::connection();
 
             // Escape the user input to prevent SQL injection
-            $aid = $connection->getPdo()->quote($aid);
+            $vtype = $connection->getPdo()->quote($vtype);
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE agent_id = $aid AND visa_type = $vtype");
-            $agent_name = $connection->select("SELECT agent_name FROM agents WHERE id = $aid");
-            if (empty($agent_name)) {
-                $agent_name = "Unknown";
-            }
-            else $agent_name = $agent_name[0]->agent_name;
+            $results = $connection->select("SELECT * FROM vendors WHERE visa_type = $vtype");
         } catch (\Exception $e) {
-            // Log the error message
+            // Handle any exceptions that occur during the database operation
+            echo "Error: " . $e->getMessage();
         }
     }
 ?>
 
 <?php $__env->startSection('page-title'); ?>
-    <?php echo e(__('Agents')); ?>
+    <?php echo e(__('Vendors')); ?>
 
 <?php $__env->stopSection(); ?>
 
@@ -39,6 +34,7 @@
 
 <?php $__env->startSection('breadcrumb'); ?>
     <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('Dashboard')); ?></a></li>
+    <li class="breadcrumb-item"><?php echo e(__('Service Providing')); ?></li>
     <li class="breadcrumb-item">
     <?php if(isset($_GET['visa_type'])): ?>
     <?php
@@ -84,23 +80,23 @@
 
 <div class="modal fade" id="createAgent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-  <form method="post" action="<?php echo e(route('agents.store')); ?>">
+  <form method="post" action="<?php echo e(route('vendors.store')); ?>">
   <?php echo csrf_field(); ?>
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Agent</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Vendor</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row">
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Agent Name</label>
-                    <input type="text" name="agent_name" class="form-control" placeholder="Agent Name" required>
-                    <label for="agent_name" class="form-label">Passport Number</label>
-                    <input type="text" name="passport_number" class="form-control" placeholder="Agent Passport Number" required>
+                    <label for="vendor_name" class="form-label">Vendor Name</label>
+                    <input type="text" name="vendor_name" class="form-control" placeholder="Vendor Name" required>
+                    <label for="company_details" class="form-label">Company Details</label>
+                    <textarea name="company_details" class="form-control" placeholder="Company Details" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Visa Type</label>
+                    <label for="visa_type" class="form-label">Visa Type</label>
                     <select name="visa_type" class="form-control" required>
                         <option value="WV">Work Permit Visa</option>
                         <option value="BV">Business Visa</option>
@@ -114,7 +110,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Add Agent"></input>
+        <input type="submit" class="btn btn-primary" value="Add Vendor"></input>
       </div>
     </div>
     </form>
@@ -141,59 +137,41 @@
         </div>
     </form>
 </div>
-
     <div class="row mt-4">
         <div class="col-xxl-12">
-           
         <div class="card">
 
-        <div class="card-body table-border-style">
+<div class="card-body table-border-style">
 
-
-            <div class="table-responsive">
+    <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col"><?php echo e(__('Client Name')); ?></th>
-                        <th scope="col"><?php echo e(__('Passport Number')); ?></th>
-                        <th scope="col"><?php echo e(__('Visa Type')); ?></th>
+                        <th scope="col"><?php echo e(__('Vendor Name')); ?></th>
+                        <th scope="col"><?php echo e(__('Details')); ?></th>
                         <th scope="col"><?php echo e(__('Paid')); ?></th>
                         <th scope="col"><?php echo e(__('Due')); ?></th>
-                        <th scope="col"><?php echo e(__('Status')); ?></th>
-
-
+                        <th scope="col"><?php echo e(__('Attachment')); ?></th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
                     <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
                             <th scope="row"><?php echo e($index + 1); ?></th>
-                            <td><?php echo e($result->client_name); ?></td>
-                            <td><?php echo e($result->passport_no); ?></td>
-                            <td>
-                                <?php if($result->visa_type == "WV"): ?>
-                                    Work Visa
-                                <?php elseif($result->visa_type == "SV"): ?>
-                                    Student Visa
-                                <?php elseif($result->visa_type == "TV"): ?>
-                                    Tourist Visa
-                                <?php elseif($result->visa_type == "BV"): ?>
-                                    Business Visa
-                                <?php else: ?>
-                                    Other Visa
-                                <?php endif; ?>
-                            </td>
+                            <td><a href="/vendors?visa_type=<?php echo e($vtype); ?>&vendor=<?php echo e($result -> id); ?>"><?php echo e($result->vendor_name); ?></a></td>
+                            <td><?php echo e($result->company_details); ?></td>
                             <td><?php echo e($result->amount_paid); ?></td>
                             <td><?php echo e($result->amount_due); ?></td>
-                            <td><?php echo e($result->status); ?></td>
+<td><?php echo e(!empty($result->attachment) ? $result->attachment : "N/A"); ?></td>
+
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
             </div>
-        </div>
-        </div>
+            </div>
+            </div>
         </div>
     </div>
 <?php $__env->stopSection(); ?>
@@ -223,4 +201,4 @@
     </script>
 <?php $__env->stopPush(); ?>
 
-<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/tesla/Desktop/ERP/main-file/resources/views/agents/clients.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/tesla/Desktop/ERP/main-file/resources/views/vendors/index.blade.php ENDPATH**/ ?>

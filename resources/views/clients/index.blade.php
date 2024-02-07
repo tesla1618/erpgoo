@@ -14,7 +14,7 @@ $profile=\App\Models\Utility::get_file('uploads/avatar');
 @endsection
 @section('action-btn')
     <div class="float-end">
-        <a href="#" data-size="md" data-url="{{ route('vclients.create') }}" data-ajax-popup="true"  data-bs-toggle="tooltip" title="{{__('Create Client')}}"  class="btn btn-sm btn-primary">
+        <a href="#" data-size="md" data-url="{{ route('clients.create') }}" data-ajax-popup="true"  data-bs-toggle="tooltip" title="{{__('Create Client')}}"  class="btn btn-sm btn-primary">
             <i class="ti ti-plus"></i>
         </a>
     </div>

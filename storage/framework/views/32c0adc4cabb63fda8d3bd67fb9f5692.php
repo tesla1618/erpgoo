@@ -14,7 +14,7 @@ $profile=\App\Models\Utility::get_file('uploads/avatar');
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('action-btn'); ?>
     <div class="float-end">
-        <a href="#" data-size="md" data-url="<?php echo e(route('vclients.create')); ?>" data-ajax-popup="true"  data-bs-toggle="tooltip" title="<?php echo e(__('Create Client')); ?>"  class="btn btn-sm btn-primary">
+        <a href="#" data-size="md" data-url="<?php echo e(route('clients.create')); ?>" data-ajax-popup="true"  data-bs-toggle="tooltip" title="<?php echo e(__('Create Client')); ?>"  class="btn btn-sm btn-primary">
             <i class="ti ti-plus"></i>
         </a>
     </div>

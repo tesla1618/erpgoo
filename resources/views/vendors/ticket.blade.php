@@ -5,35 +5,30 @@
     $profile = \App\Models\Utility::get_file('uploads/avatar');
 
     // Check if 'visa_type' parameter is set in the URL
-    $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
-    $aid = isset($_GET['agent']) ? $_GET['agent'] : null;
+   
     $results = [];
     
 
     // Get data from the database based on the 'visa_type' parameter
-    if (!is_null($aid)) {
+
         try {
             // Establish a database connection
             $connection = DB::connection();
 
             // Escape the user input to prevent SQL injection
-            $aid = $connection->getPdo()->quote($aid);
+        
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE agent_id = $aid AND visa_type = $vtype");
-            $agent_name = $connection->select("SELECT agent_name FROM agents WHERE id = $aid");
-            if (empty($agent_name)) {
-                $agent_name = "Unknown";
-            }
-            else $agent_name = $agent_name[0]->agent_name;
+            $results = $connection->select("SELECT * FROM clients WHERE isTicket = 1");
+            
         } catch (\Exception $e) {
             // Log the error message
         }
-    }
+    
 @endphp
 
 @section('page-title')
-    {{ __('Agents') }}
+    {{ __('Vendors') }}
 @endsection
 
 @push('script-page')
@@ -41,27 +36,8 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
-    <li class="breadcrumb-item">
-    @if (isset($_GET['visa_type']))
-    @php
-        $vtype = $_GET['visa_type'];
-    @endphp
-
-    @if ($vtype == "WV")
-        {{ __('Work Permit Visa') }}
-    @elseif ($vtype == "BV")
-        {{ __('Business Visa') }}
-    @elseif ($vtype == "SV")
-        {{ __('Student Visa') }}
-    @elseif ($vtype == "TV")
-        {{ __('Tourist Visa') }}
-    @elseif ($vtype == "OV")
-        {{ __('Others') }}
-    @else
-        {{ $vtype }}
-    @endif
-@endif
-</li>
+    <li class="breadcrumb-item">{{ __('Ticket') }}</li>
+    
 
 @endsection
 

@@ -6,34 +6,30 @@
 
     // Check if 'visa_type' parameter is set in the URL
     $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
-    $aid = isset($_GET['agent']) ? $_GET['agent'] : null;
     $results = [];
     
 
     // Get data from the database based on the 'visa_type' parameter
-    if (!is_null($aid)) {
+    
         try {
             // Establish a database connection
+
             $connection = DB::connection();
+            $vtype = $connection->getPdo()->quote($vtype);
 
             // Escape the user input to prevent SQL injection
-            $aid = $connection->getPdo()->quote($aid);
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE agent_id = $aid AND visa_type = $vtype");
-            $agent_name = $connection->select("SELECT agent_name FROM agents WHERE id = $aid");
-            if (empty($agent_name)) {
-                $agent_name = "Unknown";
-            }
-            else $agent_name = $agent_name[0]->agent_name;
+            $results = $connection->select("SELECT * FROM clients WHERE visa_type = $vtype");
+            
         } catch (\Exception $e) {
             // Log the error message
         }
-    }
+    
 @endphp
 
 @section('page-title')
-    {{ __('Agents') }}
+    {{ __('Clients') }}
 @endsection
 
 @push('script-page')
@@ -157,6 +153,7 @@
                         <th scope="col">{{ __('Paid') }}</th>
                         <th scope="col">{{ __('Due') }}</th>
                         <th scope="col">{{ __('Status') }}</th>
+                        <th scope="col">{{ __('Attachment') }}</th>
 
 
                     </tr>
@@ -183,6 +180,8 @@
                             <td>{{ $result->amount_paid }}</td>
                             <td>{{ $result->amount_due }}</td>
                             <td>{{ $result->status }}</td>
+<td>{{ !empty($result->attachment) ? $result->attachment : "N/A" }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>

@@ -307,8 +307,8 @@
 
                         <?php if($show_dashboard == 1): ?>
                         <?php if( Gate::check('manage project')): ?>
-                          
-                        <li class="dash-item dash-hasmenu <?php echo e((Request::segment(1) == 'project' || Request::segment(1) == 'bugs-report' || Request::segment(1) == 'bugstatus' || Request::segment(1) == 'project-task-stages' || Request::segment(1) == 'calendar' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'timesheet-list' || Request::segment(1) == 'taskboard' || Request::segment(1) == 'project' || Request::segment(1) == 'projects' || Request::segment(1) == 'project_report') ? 'active dash-trigger' : ''); ?>">
+                        <li class="dash-item dash-hasmenu<?php echo e(Str::contains(request()->url(), '/vendors') ? ' active dash-trigger' : ''); ?>">
+
                             <a href="#!" class="dash-link">
                                 <span class="dash-micon"><i class="ti ti-share"></i></span>
                                 <span class="dash-mtext"><?php echo e(__('Vendors')); ?></span>
@@ -316,42 +316,38 @@
                             </a>
                             <ul class="dash-submenu">
                                 <!-- Service Providing Section -->
-                                <li class="dash-item dash-hasmenu <?php echo e((Request::segment(1) == 'service-providing') ? 'active dash-trigger' : ''); ?>">
+                        <li class="dash-item dash-hasmenu<?php echo e(Str::contains(request()->url(), '/vendors') ? ' active dash-trigger' : ''); ?>">
+
                                     <a href="#!" class="dash-link">
                                         <span class="dash-mtext"><?php echo e(__('Service Providing')); ?></span>
                                         <span class="dash-arrow"><i data-feather="chevron-right"></i></span>
                                     </a>
                                     <ul class="dash-submenu">
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage project')): ?>
-                                            <li class="dash-item  <?php echo e(Request::segment(1) == 'project' || Request::route()->getName() == 'projects.list' || Request::route()->getName() == 'projects.list' ||Request::route()->getName() == 'projects.index' || Request::route()->getName() == 'projects.show' || request()->is('projects/*') ? 'active' : ''); ?>">
-                                                <a class="dash-link" href="<?php echo e(route('projects.index')); ?>"><?php echo e(__('Work Permit Visa')); ?></a>
-                                            </li>
-                                        <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage project task')): ?>
-                                            <li class="dash-item <?php echo e((request()->is('taskboard*') ? 'active' : '')); ?>">
-                                                <a class="dash-link" href="<?php echo e(route('projects.index', 'list')); ?>"><?php echo e(__('Student Visa')); ?></a>
-                                            </li>
-                                        <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage timesheet')): ?>
-                                            <li class="dash-item <?php echo e((request()->is('timesheet-list*') ? 'active' : '')); ?>">
-                                                <a class="dash-link" href="<?php echo e(route('projects.index')); ?>"><?php echo e(__('Business Visa')); ?></a>
-                                            </li>
-                                        <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage bug report')): ?>
-                                            <li class="dash-item <?php echo e((request()->is('bugs-report*') ? 'active' : '')); ?>">
-                                                <a class="dash-link" href="<?php echo e(route('projects.index','list')); ?>"><?php echo e(__('Tourist Visa')); ?></a>
-                                            </li>
-                                        <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage project task')): ?>
-                                            <li class="dash-item <?php echo e((request()->is('calendar*') ? 'active' : '')); ?>">
-                                                <a class="dash-link" href="<?php echo e(route('projects.index',['all'])); ?>"><?php echo e(__('Others')); ?></a>
-                                            </li>
-                                        <?php endif; ?>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors?visa_type=WV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors?visa_type=WV"><?php echo e(__('Work Permit Visa')); ?></a>
+                                    </li>
+
+                                  
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors?visa_type=SV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors?visa_type=SV"><?php echo e(__('Student Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors?visa_type=BV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors?visa_type=BV"><?php echo e(__('Business Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors?visa_type=TV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors?visa_type=TV"><?php echo e(__('Tourist Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors?visa_type=OV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors?visa_type=OV"><?php echo e(__('Others')); ?></a>
+                                    </li>
+                                    
+                                    
                                     </ul>
                                 </li>
                                 <!-- Ticket Section (Add your options for Ticket here if needed) -->
-                                <li class="dash-item <?php echo e((Request::segment(1) == 'ticket') ? 'active' : ''); ?>">
-                                    <a class="dash-link" href="<?php echo e(route('projects.index')); ?>"><?php echo e(__('Ticket')); ?></a>
+                                <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors/ticket') ? 'active' : ''); ?>">
+
+                                    <a class="dash-link" href="/vendors/ticket"><?php echo e(__('Ticket')); ?></a>
                                 </li>
                             </ul>
                         </li>
@@ -366,41 +362,39 @@
                        
                         <!--------------------- Start Clients ----------------------------------->
 
-                        <?php if( Gate::check('manage warehouse') ||  Gate::check('manage purchase')  || Gate::check('manage pos') || Gate::check('manage print settings')): ?>
-                            <li class="dash-item dash-hasmenu <?php echo e((Request::segment(1) == 'warehouse' || Request::segment(1) == 'purchase' || Request::route()->getName() == 'pos.barcode' || Request::route()->getName() == 'pos.print' || Request::route()->getName() == 'pos.show')?' active dash-trigger':''); ?>">
-                                <a href="#!" class="dash-link"><span class="dash-micon"><i class="ti ti-layers-difference"></i></span><span class="dash-mtext"><?php echo e(__('Clients')); ?></span><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
-                                <ul class="dash-submenu <?php echo e((Request::segment(1) == 'warehouse' || Request::segment(1) == 'purchase' || Request::route()->getName() == 'pos.barcode' || Request::route()->getName() == 'pos.print' || Request::route()->getName() == 'pos.show')?'show':''); ?>">
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage warehouse')): ?>
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'warehouse.index' || Request::route()->getName() == 'warehouse.show') ? ' active' : ''); ?>"><a class="dash-link" href="<?php echo e(route('warehouse.index')); ?>"><?php echo e(__('Work Permit Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage purchase')): ?>
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'purchase.index' || Request::route()->getName() == 'purchase.create' || Request::route()->getName() == 'purchase.edit' || Request::route()->getName() == 'purchase.show') ? ' active' : ''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('purchase.index')); ?>"><?php echo e(__('Student Visa')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage quotation')): ?>
-                                    <li
-                                        class="dash-item <?php echo e(Request::route()->getName() == 'quotation.index' || Request::route()->getName() == 'quotations.create' || Request::route()->getName() == 'quotation.edit' || Request::route()->getName() == 'quotation.show' ? ' active' : ''); ?>">
-                                        <a class="dash-link" href="<?php echo e(route('quotation.index')); ?>"><?php echo e(__('Business Visa')); ?></a>
+                        <?php if($show_dashboard == 1): ?>
+                        <?php if( Gate::check('manage lead') || Gate::check('manage deal') || Gate::check('manage form builder') || Gate::check('manage contract')): ?>
+                        <li class="dash-item dash-hasmenu<?php echo e(Str::contains(request()->url(), '/vclients') ? ' active dash-trigger' : ''); ?>">
+        
+                        <a href="#!" class="dash-link"
+                                ><span class="dash-micon"><i class="ti ti-layers-difference"></i></span
+                                    ><span class="dash-mtext"><?php echo e(__('Clients')); ?></span
+                                    ><span class="dash-arrow"><i data-feather="chevron-right"></i></span
+                                    ></a>
+                                <ul class="dash-submenu <?php echo e((Request::segment(1) == 'stages' || Request::segment(1) == 'labels' || Request::segment(1) == 'sources' || Request::segment(1) == 'lead_stages' || Request::segment(1) == 'leads'  || Request::segment(1) == 'form_builder' || Request::segment(1) == 'form_response' || Request::segment(1) == 'deals' || Request::segment(1) == 'pipelines')?'show':''); ?>">
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients?visa_type=WV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients?visa_type=WV"><?php echo e(__('Work Permit Visa')); ?></a>
                                     </li>
-                                <?php endif; ?>
-                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage pos')): ?>
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'pos.index' ) ? ' active' : ''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('pos.index')); ?>"><?php echo e(__(' Tourist Visa')); ?></a>
-                                        </li>
 
-                                        <li class="dash-item <?php echo e((Request::route()->getName() == 'pos.report' || Request::route()->getName() == 'pos.show') ? ' active' : ''); ?>">
-                                            <a class="dash-link" href="<?php echo e(route('pos.report')); ?>"><?php echo e(__('Others')); ?></a>
-                                        </li>
-                                    <?php endif; ?>
-                                       
+                                  
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients?visa_type=SV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients?visa_type=SV"><?php echo e(__('Student Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients?visa_type=BV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients?visa_type=BV"><?php echo e(__('Business Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients?visa_type=TV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients?visa_type=TV"><?php echo e(__('Tourist Visa')); ?></a>
+                                    </li>
+                                    <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients?visa_type=OV') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients?visa_type=OV"><?php echo e(__('Others')); ?></a>
+                                    </li>
                                     
                                     
-
                                 </ul>
                             </li>
                         <?php endif; ?>
+                    <?php endif; ?>
 
 
                         <!--------------------- End Clients ----------------------------------->

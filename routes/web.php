@@ -152,6 +152,21 @@ Route::get('/agents', function () {
     
 });
 
+Route::get('/vclients', function () {
+    return view('vclients.index');
+    
+});
+
+Route::get('/vendors', function () {
+    return view('vendors.index');
+    
+});
+
+Route::get('/vendors/ticket', function () {
+    return view('vendors.ticket');
+    
+});
+
 Route::get('/agents', function (Request $request) {
     // $visaType = $request->input('visa_type');
     $agent = $request->input('agent');
@@ -163,9 +178,23 @@ Route::get('/agents', function (Request $request) {
         return view('agents.index');
     }
 });
+Route::get('/vendors', function (Request $request) {
+    // $visaType = $request->input('visa_type');
+    $vendor = $request->input('vendor');
+
+    // Check the values of the URL parameters
+    if ($vendor) {
+        return view('vendors.clients');
+    } else {
+        return view('vendors.index');
+    }
+});
+
+
 
 // Route::post('/agents/store', 'AgentController@store')->name('agents.store');
 Route::middleware('web')->post('/agents/store', 'AgentController@store')->name('agents.store');
+Route::middleware('web')->post('/vendors/store', 'VendorController@store')->name('vendors.store');
 
 
 

@@ -6,7 +6,7 @@
 
     // Check if 'visa_type' parameter is set in the URL
     $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
-    $aid = isset($_GET['agent']) ? $_GET['agent'] : null;
+    $aid = isset($_GET['vendor']) ? $_GET['vendor'] : null;
     $results = [];
     
 
@@ -18,10 +18,11 @@
 
             // Escape the user input to prevent SQL injection
             $aid = $connection->getPdo()->quote($aid);
+            $vtype = $connection->getPdo()->quote($vtype);
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE agent_id = $aid AND visa_type = $vtype");
-            $agent_name = $connection->select("SELECT agent_name FROM agents WHERE id = $aid");
+            $results = $connection->select("SELECT * FROM clients WHERE vendor_id = $aid AND visa_type = $vtype");
+            $agent_name = $connection->select("SELECT vendor_name FROM vendors WHERE id = $aid");
             if (empty($agent_name)) {
                 $agent_name = "Unknown";
             }
@@ -33,7 +34,7 @@
 @endphp
 
 @section('page-title')
-    {{ __('Agents') }}
+    {{ __('Vendors') }}
 @endsection
 
 @push('script-page')
@@ -41,6 +42,7 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
+    <li class="breadcrumb-item">{{ __('Service Providing') }}</li>
     <li class="breadcrumb-item">
     @if (isset($_GET['visa_type']))
     @php
