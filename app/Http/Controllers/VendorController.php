@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Vendor;
+use App\Models\Vendor;
 
 class VendorController extends Controller
 {
@@ -52,21 +52,37 @@ class VendorController extends Controller
     // Update the specified vendor in the database
     public function update(Request $request, Vendor $vendor)
     {
+        \Log::debug($request->all());
+
         // Validate the request data
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'vendor_name' => 'required|string|max:255',
             'company_details' => 'required|string',
             'attachment' => 'nullable|file',
-            'paid' => 'boolean',
-            'due' => 'nullable|date',
+            'amount_paid_new' => 'nullable|numeric|min:0',
+        'amount_due' => 'nullable|numeric|min:0',
             // Add more validation rules for other fields as needed
         ]);
+        if ($request->hasFile('attachment')) {
+            // Get the uploaded file
+            $file = $request->file('attachment');
+            
+            // Store the file data in the database
+            $fileData = file_get_contents($file->getRealPath()); // Get the binary data of the file
+            $validatedData['attachment'] = $fileData;
+        } else {
+            // If no file is uploaded, remove the attachment key from the validated data
+            unset($validatedData['attachment']);
+        }
+
+        $validatedData['amount_paid'] = $vendor->amount_paid + $validatedData['amount_paid_new'];
 
         // Update the vendor
         $vendor->update($validatedData);
 
         // Redirect to the vendors index page with a success message
-        return redirect()->route('vendors.index')->with('success', 'Vendor updated successfully.');
+        return redirect()->back()->with('success', 'Vendor updated successfully!');
+    
     }
 
     // Delete the specified vendor from the database
@@ -75,6 +91,7 @@ class VendorController extends Controller
         $vendor->delete();
 
         // Redirect to the vendors index page with a success message
-        return redirect()->route('vendors.index')->with('success', 'Vendor deleted successfully.');
+        return redirect()->back()->with('success', 'Vendor deleted successfully!');
+
     }
 }

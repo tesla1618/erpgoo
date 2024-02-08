@@ -1,4 +1,4 @@
-{{ Form::model($agent, array('route' => array('agents.update', $agent->id), 'method' => 'PUT' , 'enctype' => 'multipart/form-data')) }}
+{{ Form::model($vclient, array('route' => array('vclients.update', $vclient->id), 'method' => 'PUT' , 'enctype' => 'multipart/form-data')) }}
 
 <div class="modal-body">
     {{-- start for ai module--}}
@@ -16,8 +16,8 @@
     {{-- end for ai module--}}
     <div class="row">
         <div class="form-group col-md-6">
-            {{ Form::label('agent_name', __('Name'),['class'=>'form-label']) }}
-            {{ Form::text('agent_name', null, array('class' => 'form-control','required'=>'required')) }}
+            {{ Form::label('client_name', __('Name'),['class'=>'form-label']) }}
+            {{ Form::text('client_name', null, array('class' => 'form-control','required'=>'required')) }}
             @error('name')
             <small class="invalid-name" role="alert">
                 <strong class="text-danger">{{ $message }}</strong>
@@ -25,8 +25,8 @@
             @enderror
         </div>
         <div class="form-group col-md-6">
-            {{ Form::label('passport_number', __('Passport Number'),['class'=>'form-label']) }}
-            {{ Form::text('passport_number', null, array('class' => 'form-control','required'=>'required')) }}
+            {{ Form::label('passport_no', __('Passport Number'),['class'=>'form-label']) }}
+            {{ Form::text('passport_no', null, array('class' => 'form-control','required'=>'required')) }}
         </div>
         <div class="form-group col-md-6">
             {{Form::label('amount_paid_new',__('Paid'),array('class'=>'form-label')) }}
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group col-md-6">
             {{Form::label('amount_due',__('Due'),array('class'=>'form-label')) }}
-            {{Form::hidden('original_due', $agent->amount_due)}}
+            {{Form::hidden('original_due', $vclient->amount_due)}}
             {{Form::number('amount_due',null,array('class'=>'form-control', 'step'=>'any', 'id' => 'amount_due', 'readonly' => 'readonly'))}}
         </div>
         <div class="form-group col-md-12">

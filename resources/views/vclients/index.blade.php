@@ -76,23 +76,23 @@
 
 <div class="modal fade" id="createAgent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-  <form method="post" action="{{ route('agents.store') }}">
+  <form method="post" action="{{ route('vclients.store') }}">
   @csrf
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Agent</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Client</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row">
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Agent Name</label>
-                    <input type="text" name="agent_name" class="form-control" placeholder="Agent Name" required>
-                    <label for="agent_name" class="form-label">Passport Number</label>
-                    <input type="text" name="passport_number" class="form-control" placeholder="Agent Passport Number" required>
+                    <label for="agent_name" class="form-label">Client Name</label>
+                    <input type="text" name="client_name" class="form-control" placeholder="Client Name" required>
+                    <label for="passport_no" class="form-label">Passport Number</label>
+                    <input type="text" name="passport_no" class="form-control" placeholder="Client Passport Number" required>
                 </div>
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Visa Type</label>
+                    <label for="visa_type" class="form-label">Visa Type</label>
                     <select name="visa_type" class="form-control" required>
                         <option value="WV">Work Permit Visa</option>
                         <option value="BV">Business Visa</option>
@@ -106,7 +106,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Add Agent"></input>
+        <input type="submit" class="btn btn-primary" value="Add Client"></input>
       </div>
     </div>
     </form>
@@ -114,53 +114,29 @@
 </div>
 
 
-
-<div class="modal" aria-labelledby="createAgent">
-    
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div class="modal-body">
-            <div class="row">
-                <div class="form-group">
-                    <label for="agent_name">Agent Name</label>
-                    <input type="text" name="agent_name" class="form-control" placeholder="Enter Agent Name" required>
-                </div>
-            </div>
-        </div>
-        
-        <div class="modal-footer">
-            <input type="button" value="Cancel" class="btn  btn-light" data-bs-dismiss="modal">
-            <input type="submit" value="Create" class="btn  btn-primary">
-        </div>
-    </form>
-</div>
-
-    <div class="row mt-4">
-        <div class="col-xxl-12">
-           
-        <div class="card">
-
-        <div class="card-body table-border-style">
-
-
-            <div class="table-responsive">
-            <table class="table">
-                <thead>
+<div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body table-border-style">
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                        <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">{{ __('Client Name') }}</th>
-                        <th scope="col">{{ __('Passport Number') }}</th>
-                        <th scope="col">{{ __('Visa Type') }}</th>
-                        <th scope="col">{{ __('Paid') }}</th>
-                        <th scope="col">{{ __('Due') }}</th>
-                        <th scope="col">{{ __('Status') }}</th>
-                        <th scope="col">{{ __('Attachment') }}</th>
+                        <th>#</th>
+                        <th>{{ __('Client Name') }}</th>
+                        <th>{{ __('Passport Number') }}</th>
+                        <th>{{ __('Visa Type') }}</th>
+                        <th>{{ __('Paid') }}</th>
+                        <th>{{ __('Due') }}</th>
+                        <th>{{ __('Status') }}</th>
+                        <th>{{ __('Attachment') }}</th>
 
 
                     </tr>
                 </thead>
-                <tbody class="table-group-divider">
+                <tbody>
                     @foreach ($results as $index => $result)
-                        <tr>
+                        <tr class="font-style">
                             <th scope="row">{{ $index + 1 }}</th>
                             <td>{{ $result->client_name }}</td>
                             <td>{{ $result->passport_no }}</td>
@@ -185,12 +161,16 @@
                         </tr>
                     @endforeach
                 </tbody>
-            </table>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
-        </div>
     </div>
+
+
+
+   
 @endsection
 
 @push('script-page')

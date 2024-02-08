@@ -132,34 +132,33 @@
                                 <?php endif; ?>
 
                                 <?php if($show_dashboard == 1 && Gate::check('show account dashboard')): ?>
-                                    <li class="dash-item dash-hasmenu <?php echo e(( Request::segment(1) == null   || Request::segment(1) == 'report' || Request::segment(1) == 'reports-monthly-cashflow' || Request::segment(1) == 'reports-quarterly-cashflow') ? ' active dash-trigger' : ''); ?>">
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/agents/dashboard') ? 'active' : ''); ?>">
                                         <a class="dash-link" href="#"><?php echo e(__('Agents ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
                                         <ul class="dash-submenu">
                                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show account dashboard')): ?>
-                                                <li class="dash-item <?php echo e(( Request::segment(1) == null || Request::segment(1) == 'account-dashboard') ? ' active' : ''); ?>">
-                                                    <a class="dash-link" href="<?php echo e(route('dashboard')); ?>"><?php echo e(__(' Overview')); ?></a>
-                                                </li>
+                                            <li class="dash-item <?php echo e(request()->fullUrl() == url('/agents/dashboard') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents/dashboard"><?php echo e(__('Overview')); ?></a>
+                                    </li>
+                                            <?php endif; ?>
+                                                
+                                        </ul>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if($show_dashboard == 1 && Gate::check('show account dashboard')): ?>
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/vendors/dashboard') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="#"><?php echo e(__('Vendors ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                        <ul class="dash-submenu">
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show account dashboard')): ?>
+                                            <li class="dash-item <?php echo e(request()->fullUrl() == url('/vendors/dashboard') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors/dashboard"><?php echo e(__('Overview')); ?></a>
+                                    </li>
                                             <?php endif; ?>
                                                 
                                         </ul>
                                     </li>
                                 <?php endif; ?>
 
-                                <?php if($show_dashboard== 1): ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show hrm dashboard')): ?>
-                                            <li class="dash-item dash-hasmenu">
-                                                <a class="dash-link" href="#"><?php echo e(__('Vendors ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
-                                                <ul class="dash-submenu">
-                                                    <li class="dash-item <?php echo e((\Request::route()->getName()=='hrm.dashboard') ? ' active' : ''); ?>">
-                                                        <a class="dash-link" href="<?php echo e(route('hrm.dashboard')); ?>"><?php echo e(__(' Overview')); ?></a>
-                                                    </li>
-                                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage report')): ?>
-                                                      
-                                                    <?php endif; ?>
-                                                </ul>
-                                            </li>
-                                        <?php endif; ?>
-                                <?php endif; ?>
+                                
 
                                 
 
@@ -1046,6 +1045,15 @@
                                             <a class="dash-link" href="<?php echo e(route('pos.report')); ?>"><?php echo e(__('POS')); ?></a>
                                         </li>
                                     <?php endif; ?>
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/vendors/pos') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vendors/pos"><?php echo e(__('Vendors ')); ?></a>
+                                    </li>
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/agents/pos') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/agents/pos"><?php echo e(__('Agents ')); ?></a>
+                                    </li>
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/clients/pos') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/clients/pos"><?php echo e(__('Clients ')); ?></a>
+                                    </li>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage warehouse')): ?>
                                             <li class="dash-item <?php echo e((Request::route()->getName() == 'warehouse-transfer.index' || Request::route()->getName() == 'warehouse-transfer.show') ? ' active' : ''); ?>">
                                                 <a class="dash-link" href="<?php echo e(route('warehouse-transfer.index')); ?>"><?php echo e(__('Transfer')); ?></a>

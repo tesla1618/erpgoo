@@ -1,4 +1,4 @@
-{{ Form::model($agent, array('route' => array('agents.update', $agent->id), 'method' => 'PUT' , 'enctype' => 'multipart/form-data')) }}
+{{ Form::model($vendor, array('route' => array('vendors.update', $vendor->id), 'method' => 'PUT' , 'enctype' => 'multipart/form-data')) }}
 
 <div class="modal-body">
     {{-- start for ai module--}}
@@ -15,18 +15,18 @@
     @endif
     {{-- end for ai module--}}
     <div class="row">
-        <div class="form-group col-md-6">
-            {{ Form::label('agent_name', __('Name'),['class'=>'form-label']) }}
-            {{ Form::text('agent_name', null, array('class' => 'form-control','required'=>'required')) }}
+        <div class="form-group col-md-12">
+            {{ Form::label('vendor_name', __('Name'),['class'=>'form-label']) }}
+            {{ Form::text('vendor_name', null, array('class' => 'form-control','required'=>'required')) }}
             @error('name')
             <small class="invalid-name" role="alert">
                 <strong class="text-danger">{{ $message }}</strong>
             </small>
             @enderror
         </div>
-        <div class="form-group col-md-6">
-            {{ Form::label('passport_number', __('Passport Number'),['class'=>'form-label']) }}
-            {{ Form::text('passport_number', null, array('class' => 'form-control','required'=>'required')) }}
+        <div class="form-group col-md-12">
+            {{Form::label('company_details',__('Company Details'),array('class'=>'form-label')) }}
+            {{Form::textarea('company_details',null,array('class'=>'form-control','rows'=>3))}}
         </div>
         <div class="form-group col-md-6">
             {{Form::label('amount_paid_new',__('Paid'),array('class'=>'form-label')) }}
@@ -34,11 +34,11 @@
         </div>
         <div class="form-group col-md-6">
             {{Form::label('amount_due',__('Due'),array('class'=>'form-label')) }}
-            {{Form::hidden('original_due', $agent->amount_due)}}
+            {{Form::hidden('original_due', $vendor->amount_due)}}
             {{Form::number('amount_due',null,array('class'=>'form-control', 'step'=>'any', 'id' => 'amount_due', 'readonly' => 'readonly'))}}
         </div>
         <div class="form-group col-md-12">
-    {{Form::label('attachment',__('Attachment'),array('class'=>'form-label')) }}
+    {{Form::label('attachment',__('Company Attachment'),array('class'=>'form-label')) }}
     {{Form::file('attachment', array('class'=>'form-control'))}}
 </div>
 

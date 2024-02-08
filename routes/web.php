@@ -147,8 +147,33 @@ use Illuminate\Http\Request;
 // Route::resource('vendors', VendorController::class);
 // Route::resource('vclients', VClientController::class);
 
+
+
+
+
 Route::get('/agents', function () {
     return view('agents.index');
+    
+});
+Route::get('/agents/dashboard', function () {
+    return view('agents.dashboard');
+    
+});
+
+Route::get('/vendors/dashboard', function () {
+    return view('vendors.dashboard');
+    
+});
+Route::get('/vendors/pos', function () {
+    return view('vendors.pos');
+    
+});
+Route::get('/vclients/pos', function () {
+    return view('vclients.pos');
+    
+});
+Route::get('/agents/pos', function () {
+    return view('agents.pos');
     
 });
 
@@ -194,7 +219,20 @@ Route::get('/vendors', function (Request $request) {
 
 // Route::post('/agents/store', 'AgentController@store')->name('agents.store');
 Route::middleware('web')->post('/agents/store', 'AgentController@store')->name('agents.store');
+Route::middleware('web')->post('/vclients/store', 'VClientController@store')->name('vclients.store');
 Route::middleware('web')->post('/vendors/store', 'VendorController@store')->name('vendors.store');
+Route::get('/vendors/edit/{vendor}', 'VendorController@edit')->name('vendors.edit');
+Route::delete('/vendors/delete/{vendor}', 'VendorController@destroy')->name('vendors.destroy');
+Route::put('/vendors/{vendor}', 'VendorController@update')->name('vendors.update');
+
+Route::get('/vclients/edit/{vclient}', 'VClientController@edit')->name('vclients.edit');
+Route::delete('/vclients/delete/{vclient}', 'VClientController@destroy')->name('vclients.destroy');
+Route::put('/vclients/{vclient}', 'VClientController@update')->name('vclients.update');
+
+Route::get('/agents/edit/{agent}', 'AgentController@edit')->name('agents.edit');
+Route::delete('/agents/delete/{agent}', 'AgentController@destroy')->name('agents.destroy');
+Route::put('/agents/{agent}', 'AgentController@update')->name('agents.update');
+
 
 
 

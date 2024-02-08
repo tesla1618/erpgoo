@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class Agent extends Model
 
     // Fillable fields for mass assignment
     protected $fillable = [
-        'agent_name', // Add more fields as needed
+        'agent_name', 'passport_number', 'visa_type', 'attachment', 'amount_paid', 'amount_due', // Add more fields as needed
     ];
 
     // Guarded fields to prevent mass assignment
@@ -21,6 +21,6 @@ class Agent extends Model
     // Example: an agent may have many clients
     public function clients()
     {
-        return $this->hasMany(Client::class);
+        return $this->hasMany(VClient::class);
     }
 }

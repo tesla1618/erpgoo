@@ -76,8 +76,8 @@
     </div>
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startSection('content'); ?>
 
+<?php $__env->startSection('content'); ?>
 <div class="modal fade" id="createAgent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
   <form method="post" action="<?php echo e(route('vendors.store')); ?>">
@@ -118,62 +118,45 @@
 </div>
 
 
+<div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body table-border-style">
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead>
+                            <tr>
+                                <th><?php echo e(__('Name')); ?></th>
+                                <th><?php echo e(__('Company Details')); ?></th>
+                                <th><?php echo e(__('Paid')); ?></th>
+                                <th><?php echo e(__('Due')); ?></th>
+                                <th><?php echo e(__('Attachment')); ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr class="font-style">
+                                    <td><?php echo e($result->vendor_name); ?></td>
+                                    <td><?php echo e($result->company_details); ?></td>
+                                    <td><?php echo e($result->amount_paid); ?></td>
+                                    <td><?php echo e($result->amount_due); ?></td>
+                                    <!-- <td><?php echo e($result->attachment); ?></td> -->
+                                    <td><a href="<?php echo e(asset('uploads/' . $result->attachment)); ?>">File</a></td>
 
-<div class="modal" aria-labelledby="createAgent">
-    
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div class="modal-body">
-            <div class="row">
-                <div class="form-group">
-                    <label for="agent_name">Agent Name</label>
-                    <input type="text" name="agent_name" class="form-control" placeholder="Enter Agent Name" required>
+                                    
+                                </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <div class="modal-footer">
-            <input type="button" value="Cancel" class="btn  btn-light" data-bs-dismiss="modal">
-            <input type="submit" value="Create" class="btn  btn-primary">
-        </div>
-    </form>
-</div>
-    <div class="row mt-4">
-        <div class="col-xxl-12">
-        <div class="card">
-
-<div class="card-body table-border-style">
-
-    <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col"><?php echo e(__('Vendor Name')); ?></th>
-                        <th scope="col"><?php echo e(__('Details')); ?></th>
-                        <th scope="col"><?php echo e(__('Paid')); ?></th>
-                        <th scope="col"><?php echo e(__('Due')); ?></th>
-                        <th scope="col"><?php echo e(__('Attachment')); ?></th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <th scope="row"><?php echo e($index + 1); ?></th>
-                            <td><a href="/vendors?visa_type=<?php echo e($vtype); ?>&vendor=<?php echo e($result -> id); ?>"><?php echo e($result->vendor_name); ?></a></td>
-                            <td><?php echo e($result->company_details); ?></td>
-                            <td><?php echo e($result->amount_paid); ?></td>
-                            <td><?php echo e($result->amount_due); ?></td>
-<td><?php echo e(!empty($result->attachment) ? $result->attachment : "N/A"); ?></td>
-
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
-            </table>
-            </div>
-            </div>
-            </div>
-        </div>
     </div>
+
+
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('script-page'); ?>

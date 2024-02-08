@@ -139,7 +139,7 @@
 <div class="card-body table-border-style">
 
     <div class="table-responsive">
-            <table class="table">
+            <table class="table datatable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>

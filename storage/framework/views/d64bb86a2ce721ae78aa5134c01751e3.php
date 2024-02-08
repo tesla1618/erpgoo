@@ -54,23 +54,23 @@
 
 <div class="modal fade" id="createAgent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-  <form method="post" action="<?php echo e(route('agents.store')); ?>">
+  <form method="post" action="<?php echo e(route('vendors.store')); ?>">
   <?php echo csrf_field(); ?>
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Agent</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Vendor</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row">
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Agent Name</label>
-                    <input type="text" name="agent_name" class="form-control" placeholder="Agent Name" required>
-                    <label for="agent_name" class="form-label">Passport Number</label>
-                    <input type="text" name="passport_number" class="form-control" placeholder="Agent Passport Number" required>
+                    <label for="vendor_name" class="form-label">Vendor Name</label>
+                    <input type="text" name="vendor_name" class="form-control" placeholder="Vendor Name" required>
+                    <label for="company_details" class="form-label">Company Details</label>
+                    <textarea name="company_details" class="form-control" placeholder="Company Details" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="agent_name" class="form-label">Visa Type</label>
+                    <label for="visa_type" class="form-label">Visa Type</label>
                     <select name="visa_type" class="form-control" required>
                         <option value="WV">Work Permit Visa</option>
                         <option value="BV">Business Visa</option>
@@ -84,7 +84,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Add Agent"></input>
+        <input type="submit" class="btn btn-primary" value="Add Vendor"></input>
       </div>
     </div>
     </form>
@@ -121,7 +121,7 @@
 
 
             <div class="table-responsive">
-            <table class="table">
+            <table class="table datatable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -131,6 +131,7 @@
                         <th scope="col"><?php echo e(__('Paid')); ?></th>
                         <th scope="col"><?php echo e(__('Due')); ?></th>
                         <th scope="col"><?php echo e(__('Status')); ?></th>
+                        <th scope="col"><?php echo e(__('Ticket')); ?></th>
 
 
                     </tr>
@@ -157,6 +158,11 @@
                             <td><?php echo e($result->amount_paid); ?></td>
                             <td><?php echo e($result->amount_due); ?></td>
                             <td><?php echo e($result->status); ?></td>
+                            <td><?php if($result->isTicket == 1): ?>
+                                    Yes
+                                <?php else: ?>
+                                    No
+                                <?php endif; ?></td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
