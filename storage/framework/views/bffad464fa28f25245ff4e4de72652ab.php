@@ -1052,7 +1052,7 @@
                                         <a class="dash-link" href="/agents/pos"><?php echo e(__('Agents ')); ?></a>
                                     </li>
                                     <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/clients/pos') ? 'active' : ''); ?>">
-                                        <a class="dash-link" href="/clients/pos"><?php echo e(__('Clients ')); ?></a>
+                                        <a class="dash-link" href="/vclients/pos"><?php echo e(__('Clients ')); ?></a>
                                     </li>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage warehouse')): ?>
                                             <li class="dash-item <?php echo e((Request::route()->getName() == 'warehouse-transfer.index' || Request::route()->getName() == 'warehouse-transfer.show') ? ' active' : ''); ?>">

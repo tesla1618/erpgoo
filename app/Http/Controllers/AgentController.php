@@ -46,7 +46,7 @@ class AgentController extends Controller
         $validatedData = $request->validate([
             'agent_name' => 'string|max:255',
             'passport_number' => 'string|max:255',
-            // 'visa_type' => 'required|string|max:255',
+            'visa_type' => 'nullable|string|max:255',
             'amount_paid_new' => 'nullable|numeric|min:0',
             'amount_due' => 'nullable|numeric|min:0',
             'attachment' => 'nullable|file',
@@ -73,5 +73,15 @@ class AgentController extends Controller
 
         // Redirect back to the previous page or any other page
         return redirect()->back()->with('success', 'Agent updated successfully!');
+    }
+
+    public function destroy(Agent $agent)
+    {
+        $agent->delete();
+
+        // Redirect to the VClients index page with a success message
+        return redirect()->back()->with('success', 'Agent deleted successfully!');
+
+        // return redirect()->route('vclients.index')->with('success', 'VClient deleted successfully.');
     }
 }

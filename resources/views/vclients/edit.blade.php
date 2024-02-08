@@ -41,6 +41,29 @@
     {{Form::label('attachment',__('Attachment'),array('class'=>'form-label')) }}
     {{Form::file('attachment', array('class'=>'form-control'))}}
 </div>
+        <div class="form-group col-md-6">
+        <div class="form-group">
+        <label for="visa_type" class="form-label">{{ __('Visa Type') }}</label>
+        <select name="visa_type" class="form-control" required>
+            <option value="WV">{{ __('Work Permit Visa') }}</option>
+            <option value="BV">{{ __('Business Visa') }}</option>
+            <option value="SV">{{ __('Student Visa') }}</option>
+            <option value="TV">{{ __('Tourist Visa') }}</option>
+            <option value="OV">{{ __('Others') }}</option>
+        </select>
+    </div>
+</div>
+        <div class="form-group col-md-6">
+        <div class="form-group">
+        <label for="status" class="form-label">{{ __('Visa Status') }}</label>
+        <select name="status" class="form-control" required>
+            <option value="Submitted">{{ __('Submitted') }}</option>
+            <option value="Work Permit Recieved">{{ __('Work Permit Recieved') }}</option>
+            <option value="Applied For Visa">{{ __('Applied For Visa') }}</option>
+            <option value="Visa Recieved">{{ __('Visa Recieved') }}</option>
+            <option value="Completed">{{ __('Completed') }}</option>
+        </select>
+</div>
 
     </div>
 </div>
@@ -52,20 +75,36 @@
 
 <script>
     $(document).ready(function() {
-        // Get the original due amount
-        var originalDue = parseFloat($('#amount_due').val());
+    // Get the original due amount
+    var originalDue = parseFloat($('#amount_due').val());
 
-        // Calculate due amount when paid amount changes
-        $('#amount_paid_new').on('input', function() {
-            var amountPaid = parseFloat($(this).val());
+    // Function to toggle the readonly attribute based on the due amount
+    function toggleDueInputEditable(due) {
+        if (due === 0) {
+            $('#amount_due').prop('readonly', false); // Make the input editable
+        } else {
+            $('#amount_due').prop('readonly', true); // Make the input readonly
+        }
+    }
 
-            if (!isNaN(amountPaid)) {
-                // Subtract the paid amount from the original due amount only once
-                var newDue = originalDue - amountPaid;
-                // Ensure the new due amount is not negative
-                newDue = Math.max(0, newDue);
-                $('#amount_due').val(newDue.toFixed(2));
-            }
-        });
+    // Initial call to toggle the due input based on the original due amount
+    toggleDueInputEditable(originalDue);
+
+    // Calculate due amount when paid amount changes
+    $('#amount_paid_new').on('input', function() {
+        var amountPaid = parseFloat($(this).val());
+
+        if (!isNaN(amountPaid)) {
+            // Subtract the paid amount from the original due amount only once
+            var newDue = originalDue - amountPaid;
+            // Ensure the new due amount is not negative
+            newDue = Math.max(0, newDue);
+            $('#amount_due').val(newDue.toFixed(2));
+
+            // Toggle the readonly attribute based on the new due amount
+            toggleDueInputEditable(newDue);
+        }
     });
+});
+
 </script>

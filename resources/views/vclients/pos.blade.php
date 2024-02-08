@@ -50,8 +50,10 @@
                             <tr>
                                 <th>{{__('Name')}}</th>
                                 <th>{{__('Passport Number')}}</th>
+                                <th>{{__('Visa Type')}}</th>
                                 <th>{{__('Paid')}}</th>
                                 <th>{{__('Due')}}</th>
+                                <th>{{__('Status')}}</th>
                                 <th>{{__('Action')}}</th>
                             </tr>
                             </thead>
@@ -60,8 +62,22 @@
                                 <tr class="font-style">
                                     <td>{{ $result->client_name}}</td>
                                     <td>{{ $result->passport_no }}</td>
+                                    <td>
+                                @if ($result->visa_type == "WV")
+                                    Work Visa
+                                @elseif ($result->visa_type == "SV")
+                                    Student Visa
+                                @elseif ($result->visa_type == "TV")
+                                    Tourist Visa
+                                @elseif ($result->visa_type == "BV")
+                                    Business Visa
+                                @else
+                                    Other Visa
+                                @endif
+                            </td>
                                     <td>{{ $result->amount_paid }}</td>
                                     <td>{{ $result->amount_due }}</td>
+                                    <td>{{ $result->status }}</td>
 
                                     @if(Gate::check('show warehouse') || Gate::check('edit warehouse') || Gate::check('delete warehouse'))
                                         <td class="Action">

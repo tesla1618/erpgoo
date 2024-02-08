@@ -99,43 +99,51 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
                             
                             
                             <div class="card">
+                            <div class="card-body table-border-style">
 
-<div class="card-body table-border-style">
 
-    <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col"><?php echo e(__('Vendor Name')); ?></th>
-                        <th scope="col"><?php echo e(__('Details')); ?></th>
-                        <th scope="col"><?php echo e(__('Paid')); ?></th>
-                        <th scope="col"><?php echo e(__('Due')); ?></th>
-                        <th scope="col"><?php echo e(__('Attachment')); ?></th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr>
-                            <th scope="row"><?php echo e($index + 1); ?></th>
-                            <td><?php echo e($result->vendor_name); ?></td>
-                            <td><?php echo e($result->company_details); ?></td>
-                            <td><?php echo e($result->amount_paid); ?></td>
-                            <td><?php echo e($result->amount_due); ?></td>
-                            <?php if($result->attachment == null): ?> {
-                                <td>No Attachment</td>
-                            }
-                            <?php else: ?>
-                                <td><a href="<?php echo e(asset('uploads/' . $result->attachment)); ?>">File</a></td>
-                            <?php endif; ?>
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col"><?php echo e(__('Client Name')); ?></th>
+            <th scope="col"><?php echo e(__('Company Details')); ?></th>
+            <th scope="col"><?php echo e(__('Visa Type')); ?></th>
+            <th scope="col"><?php echo e(__('Paid')); ?></th>
+            <th scope="col"><?php echo e(__('Due')); ?></th>
 
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </tbody>
-            </table>
-            </div>
-            </div>
-            </div>
+
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <th scope="row"><?php echo e($index + 1); ?></th>
+                <td><?php echo e($result->vendor_name); ?></td>
+                <td><?php echo e($result->company_details); ?></td>
+                <td>
+                    <?php if($result->visa_type == "WV"): ?>
+                        Work Visa
+                    <?php elseif($result->visa_type == "SV"): ?>
+                        Student Visa
+                    <?php elseif($result->visa_type == "TV"): ?>
+                        Tourist Visa
+                    <?php elseif($result->visa_type == "BV"): ?>
+                        Business Visa
+                    <?php else: ?>
+                        Other Visa
+                    <?php endif; ?>
+                </td>
+                <td><?php echo e($result->amount_paid); ?></td>
+                <td><?php echo e($result->amount_due); ?></td>
+            </tr>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </tbody>
+</table>
+</div>
+</div>
+                            </div>
                         
                         
                         </div>

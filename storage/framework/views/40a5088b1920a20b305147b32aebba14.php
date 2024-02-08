@@ -50,6 +50,7 @@
                             <tr>
                                 <th><?php echo e(__('Name')); ?></th>
                                 <th><?php echo e(__('Passport Number')); ?></th>
+                                <th><?php echo e(__('Visa Type')); ?></th>
                                 <th><?php echo e(__('Paid')); ?></th>
                                 <th><?php echo e(__('Due')); ?></th>
                                 <th><?php echo e(__('Action')); ?></th>
@@ -60,6 +61,19 @@
                                 <tr class="font-style">
                                     <td><?php echo e($result->agent_name); ?></td>
                                     <td><?php echo e($result->passport_number); ?></td>
+                                    <td>
+                                <?php if($result->visa_type == "WV"): ?>
+                                    Work Visa
+                                <?php elseif($result->visa_type == "SV"): ?>
+                                    Student Visa
+                                <?php elseif($result->visa_type == "TV"): ?>
+                                    Tourist Visa
+                                <?php elseif($result->visa_type == "BV"): ?>
+                                    Business Visa
+                                <?php else: ?>
+                                    Other Visa
+                                <?php endif; ?>
+                            </td>
                                     <td><?php echo e($result->amount_paid); ?></td>
                                     <td><?php echo e($result->amount_due); ?></td>
 

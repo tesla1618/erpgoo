@@ -1049,7 +1049,7 @@
                                         <a class="dash-link" href="/agents/pos">{{__('Agents ')}}</a>
                                     </li>
                                     <li class="dash-item dash-hasmenu {{ request()->fullUrl() == url('/clients/pos') ? 'active' : '' }}">
-                                        <a class="dash-link" href="/clients/pos">{{__('Clients ')}}</a>
+                                        <a class="dash-link" href="/vclients/pos">{{__('Clients ')}}</a>
                                     </li>
                                         @can('manage warehouse')
                                             <li class="dash-item {{ (Request::route()->getName() == 'warehouse-transfer.index' || Request::route()->getName() == 'warehouse-transfer.show') ? ' active' : '' }}">

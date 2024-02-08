@@ -145,6 +145,7 @@
                         <th scope="col">#</th>
                         <th scope="col">{{ __('Agent Name') }}</th>
                         <th scope="col">{{ __('Passport Number') }}</th>
+                        <th scope="col">{{ __('Visa Type') }}</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
@@ -153,6 +154,19 @@
                             <th scope="row">{{ $index + 1 }}</th>
                             <td><a href="/agents?visa_type={{$vtype}}&agent={{$result -> id}}">{{ $result->agent_name }}</a></td>
                             <td>{{ $result->passport_number }}</td>
+                            <td>
+                                @if ($result->visa_type == "WV")
+                                    Work Visa
+                                @elseif ($result->visa_type == "SV")
+                                    Student Visa
+                                @elseif ($result->visa_type == "TV")
+                                    Tourist Visa
+                                @elseif ($result->visa_type == "BV")
+                                    Business Visa
+                                @else
+                                    Other Visa
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

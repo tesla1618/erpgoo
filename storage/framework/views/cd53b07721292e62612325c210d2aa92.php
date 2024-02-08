@@ -60,6 +60,29 @@ unset($__errorArgs, $__bag); ?>
     <?php echo e(Form::file('attachment', array('class'=>'form-control'))); ?>
 
 </div>
+        <div class="form-group col-md-6">
+        <div class="form-group">
+        <label for="visa_type" class="form-label"><?php echo e(__('Visa Type')); ?></label>
+        <select name="visa_type" class="form-control" required>
+            <option value="WV"><?php echo e(__('Work Permit Visa')); ?></option>
+            <option value="BV"><?php echo e(__('Business Visa')); ?></option>
+            <option value="SV"><?php echo e(__('Student Visa')); ?></option>
+            <option value="TV"><?php echo e(__('Tourist Visa')); ?></option>
+            <option value="OV"><?php echo e(__('Others')); ?></option>
+        </select>
+    </div>
+</div>
+        <div class="form-group col-md-6">
+        <div class="form-group">
+        <label for="status" class="form-label"><?php echo e(__('Visa Status')); ?></label>
+        <select name="status" class="form-control" required>
+            <option value="Submitted"><?php echo e(__('Submitted')); ?></option>
+            <option value="Work Permit Recieved"><?php echo e(__('Work Permit Recieved')); ?></option>
+            <option value="Applied For Visa"><?php echo e(__('Applied For Visa')); ?></option>
+            <option value="Visa Recieved"><?php echo e(__('Visa Recieved')); ?></option>
+            <option value="Completed"><?php echo e(__('Completed')); ?></option>
+        </select>
+</div>
 
     </div>
 </div>
@@ -72,21 +95,37 @@ unset($__errorArgs, $__bag); ?>
 
 <script>
     $(document).ready(function() {
-        // Get the original due amount
-        var originalDue = parseFloat($('#amount_due').val());
+    // Get the original due amount
+    var originalDue = parseFloat($('#amount_due').val());
 
-        // Calculate due amount when paid amount changes
-        $('#amount_paid_new').on('input', function() {
-            var amountPaid = parseFloat($(this).val());
+    // Function to toggle the readonly attribute based on the due amount
+    function toggleDueInputEditable(due) {
+        if (due === 0) {
+            $('#amount_due').prop('readonly', false); // Make the input editable
+        } else {
+            $('#amount_due').prop('readonly', true); // Make the input readonly
+        }
+    }
 
-            if (!isNaN(amountPaid)) {
-                // Subtract the paid amount from the original due amount only once
-                var newDue = originalDue - amountPaid;
-                // Ensure the new due amount is not negative
-                newDue = Math.max(0, newDue);
-                $('#amount_due').val(newDue.toFixed(2));
-            }
-        });
+    // Initial call to toggle the due input based on the original due amount
+    toggleDueInputEditable(originalDue);
+
+    // Calculate due amount when paid amount changes
+    $('#amount_paid_new').on('input', function() {
+        var amountPaid = parseFloat($(this).val());
+
+        if (!isNaN(amountPaid)) {
+            // Subtract the paid amount from the original due amount only once
+            var newDue = originalDue - amountPaid;
+            // Ensure the new due amount is not negative
+            newDue = Math.max(0, newDue);
+            $('#amount_due').val(newDue.toFixed(2));
+
+            // Toggle the readonly attribute based on the new due amount
+            toggleDueInputEditable(newDue);
+        }
     });
+});
+
 </script>
 <?php /**PATH /home/tesla/Desktop/ERP/main-file/resources/views/vclients/edit.blade.php ENDPATH**/ ?>

@@ -99,43 +99,51 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
                             
                             
                             <div class="card">
+                            <div class="card-body table-border-style">
 
-<div class="card-body table-border-style">
 
-    <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">{{ __('Vendor Name') }}</th>
-                        <th scope="col">{{ __('Details') }}</th>
-                        <th scope="col">{{ __('Paid') }}</th>
-                        <th scope="col">{{ __('Due') }}</th>
-                        <th scope="col">{{ __('Attachment') }}</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @foreach ($results as $index => $result)
-                        <tr>
-                            <th scope="row">{{ $index + 1 }}</th>
-                            <td>{{ $result->vendor_name }}</td>
-                            <td>{{ $result->company_details }}</td>
-                            <td>{{ $result->amount_paid }}</td>
-                            <td>{{ $result->amount_due }}</td>
-                            @if ($result->attachment == null) {
-                                <td>No Attachment</td>
-                            }
-                            @else
-                                <td><a href="{{ asset('uploads/' . $result->attachment) }}">File</a></td>
-                            @endif
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ __('Client Name') }}</th>
+            <th scope="col">{{ __('Company Details') }}</th>
+            <th scope="col">{{ __('Visa Type') }}</th>
+            <th scope="col">{{ __('Paid') }}</th>
+            <th scope="col">{{ __('Due') }}</th>
 
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            </div>
-            </div>
-            </div>
+
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach ($results as $index => $result)
+            <tr>
+                <th scope="row">{{ $index + 1 }}</th>
+                <td>{{ $result->vendor_name }}</td>
+                <td>{{ $result->company_details }}</td>
+                <td>
+                    @if ($result->visa_type == "WV")
+                        Work Visa
+                    @elseif ($result->visa_type == "SV")
+                        Student Visa
+                    @elseif ($result->visa_type == "TV")
+                        Tourist Visa
+                    @elseif ($result->visa_type == "BV")
+                        Business Visa
+                    @else
+                        Other Visa
+                    @endif
+                </td>
+                <td>{{ $result->amount_paid }}</td>
+                <td>{{ $result->amount_due }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+</div>
+</div>
+                            </div>
                         
                         
                         </div>
