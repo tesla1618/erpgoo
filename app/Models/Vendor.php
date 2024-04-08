@@ -11,7 +11,7 @@ class Vendor extends Model
     protected $table = 'vendors';
 
     // Fillable fields for mass assignment
-    protected $fillable = ['vendor_name', 'company_details', 'attachment', 'amount_paid', 'amount_due'];
+    protected $fillable = ['vendor_name', 'visa_type', 'company_details',  'amount_paid', 'amount_due', 'unit_price', 'refund', 'visa_country_id', 'attachment', 'attachment2', 'attachmen3', 'attachment4'];
 
 
     // Guarded fields to prevent mass assignment

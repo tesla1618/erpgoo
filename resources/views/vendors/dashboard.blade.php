@@ -107,11 +107,12 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">{{ __('Client Name') }}</th>
+            <th scope="col">{{ __('Vendor Name') }}</th>
             <th scope="col">{{ __('Company Details') }}</th>
             <th scope="col">{{ __('Visa Type') }}</th>
             <th scope="col">{{ __('Paid') }}</th>
             <th scope="col">{{ __('Due') }}</th>
+            <th scope="col">{{ __('Attachment') }}</th>
 
 
         </tr>
@@ -137,6 +138,38 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
                 </td>
                 <td>{{ $result->amount_paid }}</td>
                 <td>{{ $result->amount_due }}</td>
+                <td>
+                            @if (!empty($result->attachment) || !empty($result->attachment2) || !empty($result->attachmen3) || !empty($result->attachment4))
+                                          
+                                        @if (!empty($result->attachment)) 
+
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Passport" href="{{ asset(Storage::url($result->attachment)) }}" class="text-body" download>
+                                                <i class="fas fa-passport"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment2)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Photo" href="{{ asset(Storage::url($result->attachment2)) }}" class="text-body" download>
+                                                <i class="fas fa-file-image"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachmen3)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="PCC" href="{{ asset(Storage::url($result->attachmen3)) }}" class="text-body" download>
+                                                <i class="fas fa-file"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment4)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Others" href="{{ asset(Storage::url($result->attachment4)) }}" class="text-body" download>
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @else
+                                            <i class="fas fa-times"></i>
+                                        @endif
+                                    </td>
             </tr>
         @endforeach
     </tbody>

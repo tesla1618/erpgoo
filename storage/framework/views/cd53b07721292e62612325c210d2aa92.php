@@ -1,6 +1,13 @@
 <?php echo e(Form::model($vclient, array('route' => array('vclients.update', $vclient->id), 'method' => 'PUT' , 'enctype' => 'multipart/form-data'))); ?>
 
 
+<?php
+    // Fetch clients and agents
+    $clients = \App\Models\VClient::all();
+    $agents = \App\Models\Agent::pluck('agent_name', 'id');
+    $vendors = \App\Models\Vendor::pluck('vendor_name', 'id');
+?>
+
 <div class="modal-body">
     
     <?php
@@ -60,7 +67,7 @@ unset($__errorArgs, $__bag); ?>
     <?php echo e(Form::file('attachment', array('class'=>'form-control'))); ?>
 
 </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
         <div class="form-group">
         <label for="visa_type" class="form-label"><?php echo e(__('Visa Type')); ?></label>
         <select name="visa_type" class="form-control" required>
@@ -72,7 +79,7 @@ unset($__errorArgs, $__bag); ?>
         </select>
     </div>
 </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
         <div class="form-group">
         <label for="status" class="form-label"><?php echo e(__('Visa Status')); ?></label>
         <select name="status" class="form-control" required>
@@ -84,7 +91,35 @@ unset($__errorArgs, $__bag); ?>
         </select>
 </div>
 
+
+
+
     </div>
+
+    <div class="form-group col-md-3">
+    <div class="form-group">
+        <label for="agent_id" class="form-label"><?php echo e(__('Agent')); ?></label>
+        <select name="agent_id" class="form-control" >
+            <option value=""><?php echo e(__('Select Agent')); ?></option>
+            <?php $__currentLoopData = $agents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $agentId => $agentName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($agentId); ?>" <?php echo e($vclient->agent_id == $agentId ? 'selected' : ''); ?>><?php echo e($agentName); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <option value=""><?php echo e(__('N/A')); ?></option>
+        </select>
+    </div>
+</div>
+    <div class="form-group col-md-3">
+    <div class="form-group">
+        <label for="vendor_id" class="form-label"><?php echo e(__('Vendor')); ?></label>
+        <select name="vendor_id" class="form-control" >
+            <option value=""><?php echo e(__('Select Vendor')); ?></option>
+            <?php $__currentLoopData = $vendors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vendorId => $vendorName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($vendorId); ?>" <?php echo e($vclient->vemdor_id == $vendorId ? 'selected' : ''); ?>><?php echo e($vendorName); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <option value=""><?php echo e(__('N/A')); ?></option>
+        </select>
+    </div>
+</div>
 </div>
 <div class="modal-footer">
     <input type="button" value="<?php echo e(__('Cancel')); ?>" class="btn  btn-light" data-bs-dismiss="modal">

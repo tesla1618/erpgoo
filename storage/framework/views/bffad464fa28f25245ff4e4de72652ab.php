@@ -157,6 +157,19 @@
                                         </ul>
                                     </li>
                                 <?php endif; ?>
+                                <?php if($show_dashboard == 1 && Gate::check('show account dashboard')): ?>
+                                    <li class="dash-item dash-hasmenu <?php echo e(request()->fullUrl() == url('/vclients/dashboard') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="#"><?php echo e(__('Clients ')); ?><span class="dash-arrow"><i data-feather="chevron-right"></i></span></a>
+                                        <ul class="dash-submenu">
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('show account dashboard')): ?>
+                                            <li class="dash-item <?php echo e(request()->fullUrl() == url('/vclients/dashboard') ? 'active' : ''); ?>">
+                                        <a class="dash-link" href="/vclients/dashboard"><?php echo e(__('Overview')); ?></a>
+                                    </li>
+                                            <?php endif; ?>
+                                                
+                                        </ul>
+                                    </li>
+                                <?php endif; ?>
 
                                 
 

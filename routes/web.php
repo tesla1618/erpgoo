@@ -139,6 +139,7 @@ use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VClientController;
+use App\Http\Controllers\VexpenseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -164,6 +165,10 @@ Route::get('/vendors/dashboard', function () {
     return view('vendors.dashboard');
     
 });
+Route::get('/vclients/dashboard', function () {
+    return view('vclients.dashboard');
+    
+});
 Route::get('/vendors/pos', function () {
     return view('vendors.pos');
     
@@ -187,9 +192,71 @@ Route::get('/vendors', function () {
     
 });
 
+Route::get('/countries', function () {
+    // $visaType = $request->input('visa_type');
+    
+        return view('countries.index');
+    });
+
+
+
+    Route::get('/countries/agents', function (Request $request) {
+        // $visaType = $request->input('visa_type');
+        $agent = $request->input('country');
+    
+        // Check the values of the URL parameters
+        if ($agent) {
+            return view('countries.agents');
+        } else {
+            return view('countries.index');
+        }
+    });
+
+
+
+
+    Route::get('/countries/vendors', function (Request $request) {
+        // $visaType = $request->input('visa_type');
+        $agent = $request->input('country');
+    
+        // Check the values of the URL parameters
+        if ($agent) {
+            return view('countries.vendors');
+        } else {
+            return view('countries.index');
+        }
+    });
+
+
+    Route::get('/countries/clients', function (Request $request) {
+        // $visaType = $request->input('visa_type');
+        $agent = $request->input('country');
+    
+        // Check the values of the URL parameters
+        if ($agent) {
+            return view('countries.clients');
+        } else {
+            return view('countries.index');
+        }
+    });
+
+
+
 Route::get('/vendors/ticket', function () {
     return view('vendors.ticket');
     
+});
+
+Route::get('/expenses', function (Request $request) {
+    // $visaType = $request->input('visa_type');
+    $agent = $request->input('category');
+
+    // Check the values of the URL parameters
+    if ($agent) {
+        return view('vexpenses.index2');
+    } else {
+        return view('vexpenses.index');
+    }
 });
 
 Route::get('/agents', function (Request $request) {
@@ -216,11 +283,55 @@ Route::get('/vendors', function (Request $request) {
 });
 
 
+// Route::get('/ledger/agent', function () {
+//     return view('vledger.index');
+    
+// });
+
+Route::get('/ledger/agent', function (Request $request) {
+    // $visaType = $request->input('visa_type');
+    $agent = $request->input('agent_id');
+
+    // Check the values of the URL parameters
+    if ($agent) {
+        return view('vledger.index2');
+    } else {
+        return view('vledger.index');
+    }
+});
+
+Route::get('/ledger/vendor', function (Request $request) {
+    // $visaType = $request->input('visa_type');
+    $vendor = $request->input('vendor_id');
+
+    // Check the values of the URL parameters
+    if ($vendor) {
+        return view('vledgerv.index2');
+    } else {
+        return view('vledgerv.index');
+    }
+});
+
+
+Route::get('/print', function () {
+    return view('vprint.index');
+    
+});
+
+
+
 
 // Route::post('/agents/store', 'AgentController@store')->name('agents.store');
 Route::middleware('web')->post('/agents/store', 'AgentController@store')->name('agents.store');
 Route::middleware('web')->post('/vclients/store', 'VClientController@store')->name('vclients.store');
 Route::middleware('web')->post('/vendors/store', 'VendorController@store')->name('vendors.store');
+Route::middleware('web')->post('/vexpense/store', 'VexpenseController@store')->name('vexpense.store');
+Route::middleware('web')->post('/ledger/store', 'LedgerController@store')->name('ledger.store');
+Route::middleware('web')->post('/ledger/vendor/store', 'LedgerVController@store')->name('vledger.store');
+Route::delete('/vexpense/delete/{vexpense}', 'VexpenseController@destroy')->name('vexpense.destroy');
+Route::middleware('web')->post('/countries/store', 'CountryController@store')->name('countries.store');
+Route::middleware('web')->post('/categories/store', 'VexcatController@store')->name('categories.store');
+Route::delete('/categories/delete/{vexcat}', 'VexcatController@destroy')->name('vexcat.destroy');
 Route::get('/vendors/edit/{vendor}', 'VendorController@edit')->name('vendors.edit');
 Route::delete('/vendors/delete/{vendor}', 'VendorController@destroy')->name('vendors.destroy');
 Route::put('/vendors/{vendor}', 'VendorController@update')->name('vendors.update');
@@ -232,6 +343,12 @@ Route::put('/vclients/{vclient}', 'VClientController@update')->name('vclients.up
 Route::get('/agents/edit/{agent}', 'AgentController@edit')->name('agents.edit');
 Route::delete('/agents/delete/{agent}', 'AgentController@destroy')->name('agents.destroy');
 Route::put('/agents/{agent}', 'AgentController@update')->name('agents.update');
+
+Route::get('/countries/edit/{country}', 'CountryController@edit')->name('countries.edit');
+Route::delete('/countries/delete/{country}', 'CountryController@destroy')->name('countries.destroy');
+Route::put('/countries/{country}', 'CountryController@update')->name('countries.update');
+Route::delete('/ledger/delete/{ledger}', 'LedgerController@destroy')->name('ledger.destroy');
+Route::delete('/ledger/vendor/delete/{ledger}', 'LedgerVController@destroy')->name('vledger.destroy');
 
 
 
@@ -261,7 +378,13 @@ require __DIR__ . '/auth.php';
 //Route::get('/', ['as' => 'home','uses' =>'HomeController@index'])->middleware(['XSS']);
 //Route::get('/home', ['as' => 'home','uses' =>'HomeController@index'])->middleware(['auth','XSS']);
 
-Route::get('/', [DashboardController::class, 'account_dashboard_index'])->name('home')->middleware(['XSS', 'revalidate']);
+
+Route::get('/', function () {
+    return view('dashboard.khandashboard');
+})->name('dashboard')->middleware('auth');
+
+
+// Route::get('/', [DashboardController::class, 'account_dashboard_index'])->name('home')->middleware(['XSS', 'revalidate']);
 
 Route::get('/home', [DashboardController::class, 'account_dashboard_index'])->name('home')->middleware(['XSS', 'revalidate']);
 
@@ -274,9 +397,9 @@ Route::get('/login/{lang?}', [AuthenticatedSessionController::class, 'showLoginF
 // Route::get('/password/resets/{lang?}', 'Auth\AuthenticatedSessionController@showLinkRequestForm')->name('change.langPass');
 // Route::get('/password/resets/{lang?}', 'Auth\LoginController@showLinkRequestForm')->name('change.langPass');
 
-Route::get('/', [DashboardController::class, 'account_dashboard_index'])->name('dashboard')->middleware(['XSS', 'revalidate']);
+Route::get('/account-d-overview', [DashboardController::class, 'account_dashboard_index'])->name('adashboard')->middleware(['XSS', 'revalidate']);
 
-Route::get('/account-dashboard', [DashboardController::class, 'account_dashboard_index'])->name('dashboard')->middleware(['auth', 'XSS', 'revalidate']);
+Route::get('/account-dashboard', [DashboardController::class, 'account_dashboard_index'])->middleware(['auth', 'XSS', 'revalidate']);
 
 Route::get('/project-dashboard', [DashboardController::class, 'project_dashboard_index'])->name('project.dashboard')->middleware(['auth', 'XSS', 'revalidate']);
 

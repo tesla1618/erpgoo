@@ -22,7 +22,7 @@
         
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM agents");
+            $results = $connection->select("SELECT * FROM clients");
             
         } catch (\Exception $e) {
             // Log the error message
@@ -46,7 +46,7 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
 
 <?php $__env->startSection('breadcrumb'); ?>
     <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>"><?php echo e(__('Dashboard')); ?></a></li>
-    <li class="breadcrumb-item"><?php echo e(__('Agents')); ?></li>
+    <li class="breadcrumb-item"><?php echo e(__('Vendors')); ?></li>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <div class="row">
@@ -63,7 +63,7 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
                                                 <i class="ti ti-users"></i>
                                             </div>
                                             <p class="text-muted text-sm mt-4 mb-2"><?php echo e(__('Total')); ?></p>
-                                            <h6 class="mb-3"><?php echo e(__('Agents')); ?></h6>
+                                            <h6 class="mb-3"><?php echo e(__('Clients')); ?></h6>
                                             <h3 class="mb-0"><?php echo e(count($results)); ?></h3>
 
                                             </h3>
@@ -120,8 +120,8 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
         <?php $__currentLoopData = $results; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $result): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
                 <th scope="row"><?php echo e($index + 1); ?></th>
-                <td><?php echo e($result->agent_name); ?></td>
-                <td><?php echo e($result->passport_number); ?></td>
+                <td><?php echo e($result->client_name); ?></td>
+                <td><?php echo e($result->passport_no); ?></td>
                 <td>
                     <?php if($result->visa_type == "WV"): ?>
                         Work Visa

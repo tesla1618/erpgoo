@@ -11,7 +11,7 @@ class VClient extends Model
 
     // Fillable fields for mass assignment
     protected $fillable = [
-        'client_name', 'passport_no', 'visa_type', 'amount_paid', 'amount_due', 'isTicket', 'status', 'attachment', 'agent_id', 'vendor_id', // Add more fields as needed
+        'client_name', 'passport_no', 'visa_type', 'amount_paid', 'amount_due', 'isTicket', 'status', 'agent_id', 'vendor_id', 'unit_price', 'refund', 'visa_country_id', 'attachment', 'attachment2', 'attachmen3', 'attachment4' // Add more fields as needed
     ];
 
     // Guarded fields to prevent mass assignment

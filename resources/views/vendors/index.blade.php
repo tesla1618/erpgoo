@@ -7,6 +7,11 @@
     // Check if 'visa_type' parameter is set in the URL
     $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
     $results = [];
+    $countries = [];
+    $totPaid = 0;
+    $totDue = 0;
+    $totRefund = 0;
+    $totUnitPrice = 0;
     
 
     // Get data from the database based on the 'visa_type' parameter
@@ -19,7 +24,37 @@
             $vtype = $connection->getPdo()->quote($vtype);
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM vendors WHERE visa_type = $vtype");
+            $results = $connection->select("
+    SELECT vendors.*, countries.country_name
+    FROM vendors
+    LEFT JOIN countries ON vendors.visa_country_id = countries.id
+    WHERE vendors.visa_type = $vtype
+");
+$results = $connection->select("
+                SELECT vendors.*, countries.country_name,
+                SUM(clients.amount_paid) AS total_amount_paid,
+                SUM(clients.amount_due) AS total_amount_due,
+                SUM(clients.refund) AS total_refund,
+                AVG(clients.unit_price) AS total_unit_price
+                FROM vendors
+                LEFT JOIN countries ON vendors.visa_country_id = countries.id
+                LEFT JOIN clients ON clients.vendor_id = vendors.id
+                WHERE vendors.visa_type = $vtype
+                GROUP BY vendors.id
+            ");
+
+            // Get the total paid amount
+            if (!empty($results)) {
+                $totPaid = $results[0]->total_amount_paid;
+                $totRefund = $results[0]->total_refund;
+                $totPaid = $totPaid - $totRefund;
+                $totPaid = number_format($totPaid, 2);
+                $totDue = number_format($results[0]->total_amount_due, 2);
+                $totRefund = number_format($results[0]->total_refund, 2);
+                $totUnitPrice = number_format($results[0]->total_unit_price, 2);
+
+            }
+            $countries = $connection->select("SELECT * FROM countries");
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the database operation
             echo "Error: " . $e->getMessage();
@@ -102,6 +137,17 @@
                     </select>
 
                 </div>
+
+                <div class="form-group">
+                    <label for="country" class="form-label">Visa Country</label>
+                    <select name="visa_country_id" class="form-control">
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                        @endforeach
+                        
+                    </select>
+
+                </div>
             </div>
       </div>
       <div class="modal-footer">
@@ -123,21 +169,73 @@
                             <thead>
                             <tr>
                                 <th>{{__('Name')}}</th>
+                                <th>{{__('Vendor ID')}}</th>
                                 <th>{{__('Company Details')}}</th>
+                                <th>{{__('Visa Type')}}</th>
+                                <th>{{__('Country')}}</th>
+                                <th>{{__('Unit Price')}}</th>
                                 <th>{{__('Paid')}}</th>
                                 <th>{{__('Due')}}</th>
+                                <th>{{__('Refund')}}</th>
                                 <th>{{__('Attachment')}}</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($results as $index => $result)
                                 <tr class="font-style">
-                                    <td>{{ $result->vendor_name}}</td>
+                                    <td><a href="/vendors?visa_type={{$vtype}}&vendor={{$result -> id}}">{{ $result->vendor_name}}</a></td>
+                                    <td>{{ $result->unique_code }}</td>
                                     <td>{{ $result->company_details }}</td>
-                                    <td>{{ $result->amount_paid }}</td>
-                                    <td>{{ $result->amount_due }}</td>
-                                    <!-- <td>{{ $result->attachment }}</td> -->
-                                    <td><a href="{{ asset('uploads/' . $result->attachment) }}">File</a></td>
+                                    <td>
+                                @if ($result->visa_type == "WV")
+                                    Work Visa
+                                @elseif ($result->visa_type == "SV")
+                                    Student Visa
+                                @elseif ($result->visa_type == "TV")
+                                    Tourist Visa
+                                @elseif ($result->visa_type == "BV")
+                                    Business Visa
+                                @else
+                                    Other Visa
+                                @endif
+                            </td>
+                                    <td>{{ $result->country_name }}</td>
+                                    <td>{{ $totUnitPrice }}</td>
+                                    <td>{{ $totPaid }}</td>
+                                    <td>{{ $totDue }}</td>
+                                    <td>{{ $totRefund }}</td>
+                                    <td>
+                            @if (!empty($result->attachment) || !empty($result->attachment2) || !empty($result->attachmen3) || !empty($result->attachment4))
+                                          
+                                        @if (!empty($result->attachment)) 
+
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Passport" href="{{ asset(Storage::url($result->attachment)) }}" class="text-body" download>
+                                                <i class="fas fa-passport"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment2)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Photo" href="{{ asset(Storage::url($result->attachment2)) }}" class="text-body" download>
+                                                <i class="fas fa-file-image"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachmen3)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="PCC" href="{{ asset(Storage::url($result->attachmen3)) }}" class="text-body" download>
+                                                <i class="fas fa-file"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment4)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Others" href="{{ asset(Storage::url($result->attachment4)) }}" class="text-body" download>
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @else
+                                            <i class="fas fa-times"></i>
+                                        @endif
+                                    </td>
 
                                     
                                 </tr>

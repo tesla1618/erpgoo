@@ -7,6 +7,7 @@
     // Check if 'visa_type' parameter is set in the URL
     $vtype = isset($_GET['visa_type']) ? $_GET['visa_type'] : null;
     $results = [];
+    $countries = [];
     
 
     // Get data from the database based on the 'visa_type' parameter
@@ -20,10 +21,17 @@
             // Escape the user input to prevent SQL injection
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE visa_type = $vtype");
+            $results = $connection->select("
+    SELECT clients.*, countries.country_name
+    FROM clients
+    LEFT JOIN countries ON clients.visa_country_id = countries.id
+    WHERE clients.visa_type = $vtype and clients.isTicket = 0 and clients.agent_id is NULL and clients.vendor_id is NULL
+");
+            $countries = $connection->select("SELECT * FROM countries");
             
         } catch (\Exception $e) {
-            // Log the error message
+            // Handle any exceptions that occur during the database operation
+            echo "Error: " . $e->getMessage();
         }
     
 @endphp
@@ -101,6 +109,21 @@
                         <option value="OV">Others</option>
                     </select>
 
+                    <input type="hidden" name="agent_id" value="">
+                    <input type="hidden" name="vendor_id" value="">
+                    <input type="hidden" name="isTicket" value="0">
+
+                    <div class="form-group">
+                    <label for="country" class="form-label">Visa Country</label>
+                    <select name="visa_country_id" class="form-control" required>
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                        @endforeach
+                        
+                    </select>
+
+                </div>
+
                 </div>
             </div>
       </div>
@@ -118,6 +141,9 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body table-border-style">
+                    total entries: {{
+                        count($results)
+                     }}
                     <div class="table-responsive">
                         <table class="table datatable">
                         <thead>
@@ -125,9 +151,13 @@
                         <th>#</th>
                         <th>{{ __('Client Name') }}</th>
                         <th>{{ __('Passport Number') }}</th>
+                        <th>{{ __('Client ID') }}</th>
                         <th>{{ __('Visa Type') }}</th>
+                        <th>{{ __('Country') }}</th>
+                        <th>{{ __('Unit Price') }}</th>
                         <th>{{ __('Paid') }}</th>
                         <th>{{ __('Due') }}</th>
+                        <th>{{ __('Refund') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Attachment') }}</th>
 
@@ -140,6 +170,7 @@
                             <th scope="row">{{ $index + 1 }}</th>
                             <td>{{ $result->client_name }}</td>
                             <td>{{ $result->passport_no }}</td>
+                            <td>{{ $result->unique_code }}</td>
                             <td>
                                 @if ($result->visa_type == "WV")
                                     Work Visa
@@ -153,11 +184,44 @@
                                     Other Visa
                                 @endif
                             </td>
+                            <td>{{ $result->country_name }}</td>
+                            <td>{{ $result->unit_price }}</td>
                             <td>{{ $result->amount_paid }}</td>
                             <td>{{ $result->amount_due }}</td>
+                            <td>{{ $result->refund }}</td>
                             <td>{{ $result->status }}</td>
-<td>{{ !empty($result->attachment) ? $result->attachment : "N/A" }}</td>
+                            <td>
+                            @if (!empty($result->attachment) || !empty($result->attachment2) || !empty($result->attachmen3) || !empty($result->attachment4))
+                                          
+                                        @if (!empty($result->attachment)) 
 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Passport" href="{{ asset(Storage::url($result->attachment)) }}" class="text-body" download>
+                                                <i class="fas fa-passport"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment2)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Photo" href="{{ asset(Storage::url($result->attachment2)) }}" class="text-body" download>
+                                                <i class="fas fa-file-image"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachmen3)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="PCC" href="{{ asset(Storage::url($result->attachmen3)) }}" class="text-body" download>
+                                                <i class="fas fa-file"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment4)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Others" href="{{ asset(Storage::url($result->attachment4)) }}" class="text-body" download>
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @else
+                                            <i class="fas fa-times"></i>
+                                        @endif
+                                    </td>
                         </tr>
                     @endforeach
                 </tbody>

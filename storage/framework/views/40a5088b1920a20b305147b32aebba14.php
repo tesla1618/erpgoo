@@ -53,6 +53,7 @@
                                 <th><?php echo e(__('Visa Type')); ?></th>
                                 <th><?php echo e(__('Paid')); ?></th>
                                 <th><?php echo e(__('Due')); ?></th>
+                                <th><?php echo e(__('Attachment')); ?></th>
                                 <th><?php echo e(__('Action')); ?></th>
                             </tr>
                             </thead>
@@ -76,6 +77,13 @@
                             </td>
                                     <td><?php echo e($result->amount_paid); ?></td>
                                     <td><?php echo e($result->amount_due); ?></td>
+                                    <td>
+                                    <?php if($result->attachment == null): ?>
+                                        N/A
+                                    <?php else: ?>    
+                                    <a href="/<?php echo e($result->attachment); ?>">File</a>
+                                    <?php endif; ?>
+                                </td>
 
                                     <?php if(Gate::check('show warehouse') || Gate::check('edit warehouse') || Gate::check('delete warehouse')): ?>
                                         <td class="Action">

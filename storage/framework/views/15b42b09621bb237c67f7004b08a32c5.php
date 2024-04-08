@@ -107,7 +107,7 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col"><?php echo e(__('Client Name')); ?></th>
+            <th scope="col"><?php echo e(__('Agent Name')); ?></th>
             <th scope="col"><?php echo e(__('Passport Number')); ?></th>
             <th scope="col"><?php echo e(__('Visa Type')); ?></th>
             <th scope="col"><?php echo e(__('Paid')); ?></th>

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('vendors', function (Blueprint $table) {
             $table->string('vendor_name')->nullable();
-            $table->string('company_details')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
             $table->decimal('amount_due', 10, 2)->default(0);
 

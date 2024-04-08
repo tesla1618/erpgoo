@@ -10,7 +10,8 @@
     // Check if 'visa_type' parameter is set in the URL
    
     $results = [];
-    
+    $cdue = [];
+    $cpaid = [];
 
     // Get data from the database based on the 'visa_type' parameter
 
@@ -23,6 +24,8 @@
 
             // Execute a raw SQL query
             $results = $connection->select("SELECT * FROM agents");
+            $cdue = $connection->select("SELECT SUM(amount_due) as total_due FROM clients WHERE agent_id IS NOT NULL");
+            $cpaid = $connection->select("SELECT SUM(amount_paid) as total_paid FROM clients WHERE agent_id IS NOT NULL");
             
         } catch (\Exception $e) {
             // Log the error message
@@ -31,6 +34,8 @@
 @endphp
 
 @php
+    $cdue = $cdue[0]->total_due;
+    $cpaid = $cpaid[0]->total_paid;
     $totalAmountPaid = 0;
     $totalAmountDue = 0;
     foreach ($results as $result) {
@@ -39,6 +44,8 @@
     foreach ($results as $result) {
         $totalAmountDue += $result->amount_due;
     }
+    $totalAmountDue = $totalAmountDue + $cdue;
+    $totalAmountPaid = $totalAmountPaid + $cpaid;
 $totalAmountPaidf = '$' . number_format($totalAmountPaid, 2);
 $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
 
@@ -107,11 +114,12 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">{{ __('Client Name') }}</th>
-            <th scope="col">{{ __('Passport Number') }}</th>
+            <th scope="col">{{ __('Agent Name') }}</th>
+            <th scope="col">{{ __('Company Name/Unique Number') }}</th>
             <th scope="col">{{ __('Visa Type') }}</th>
             <th scope="col">{{ __('Paid') }}</th>
             <th scope="col">{{ __('Due') }}</th>
+            <th scope="col">{{ __('Attachment') }}</th>
 
 
         </tr>
@@ -137,6 +145,15 @@ $totalAmountDuef = '$' . number_format($totalAmountDue, 2);
                 </td>
                 <td>{{ $result->amount_paid }}</td>
                 <td>{{ $result->amount_due }}</td>
+                <td>
+                                        @if (!empty($result->attachment))
+                                            <a href="{{ asset(Storage::url($result->attachment)) }}" class="text-body" download>
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        @else
+                                            <i class="fas fa-times"></i>
+                                        @endif
+                                    </td>
             </tr>
         @endforeach
     </tbody>

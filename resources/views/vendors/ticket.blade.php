@@ -7,6 +7,8 @@
     // Check if 'visa_type' parameter is set in the URL
    
     $results = [];
+    $vendors = [];
+    $countries = [];
     
 
     // Get data from the database based on the 'visa_type' parameter
@@ -19,7 +21,16 @@
         
 
             // Execute a raw SQL query
-            $results = $connection->select("SELECT * FROM clients WHERE isTicket = 1");
+            $results = $connection->select("
+    SELECT clients.*, countries.country_name
+    FROM clients
+    LEFT JOIN countries ON clients.visa_country_id = countries.id
+    WHERE clients.isTicket = 1
+");
+$vendors = $connection->select("SELECT * from vendors");
+$countries = $connection->select("SELECT * from countries");
+            //$results = $connection->select("SELECT * FROM clients");
+            
             
         } catch (\Exception $e) {
             // Log the error message
@@ -56,22 +67,27 @@
 
 <div class="modal fade" id="createAgent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-  <form method="post" action="{{ route('vendors.store') }}">
+  <form method="post" action="{{ route('vclients.store') }}">
   @csrf
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Vendor</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Client</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <div class="row">
                 <div class="form-group">
-                    <label for="vendor_name" class="form-label">Vendor Name</label>
-                    <input type="text" name="vendor_name" class="form-control" placeholder="Vendor Name" required>
-                    <label for="company_details" class="form-label">Company Details</label>
-                    <textarea name="company_details" class="form-control" placeholder="Company Details" required></textarea>
+                    <label for="agent_name" class="form-label">Client Name</label>
+                    <input type="text" name="client_name" class="form-control" placeholder="Client Name" required>
+                    <label for="passport_no" class="form-label">Passport Number</label>
+                    <input type="text" name="passport_no" class="form-control" placeholder="Client Passport Number" required>
                 </div>
                 <div class="form-group">
+                    
+                    <input type="hidden" name="isTicket" value="1">
+                    <input type="hidden" name="agent_id" value="">
+                    
+
                     <label for="visa_type" class="form-label">Visa Type</label>
                     <select name="visa_type" class="form-control" required>
                         <option value="WV">Work Permit Visa</option>
@@ -81,18 +97,35 @@
                         <option value="OV">Others</option>
                     </select>
 
+                    <label for="vendor_id" class="form-label">Vendor</label>
+                    <select name="vendor_id" class="form-control" required>
+                        @foreach ($vendors as $agent)
+                            <option value="{{ $agent->id }}">{{ $agent->vendor_name }}</option>
+                        @endforeach
+                    </select>
+
+                    <div class="form-group">
+                    <label for="country" class="form-label">Visa Country</label>
+                    <select name="visa_country_id" class="form-control" required>
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                        @endforeach
+                        
+                    </select>
+
+                </div>
+
                 </div>
             </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <input type="submit" class="btn btn-primary" value="Add Vendor"></input>
+        <input type="submit" class="btn btn-primary" value="Add Client"></input>
       </div>
     </div>
     </form>
   </div>
 </div>
-
 
 
 <div class="modal" aria-labelledby="createAgent">
@@ -128,10 +161,15 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">{{ __('Client Name') }}</th>
+                        <th scope="col">{{ __('Client ID') }}</th>
                         <th scope="col">{{ __('Passport Number') }}</th>
                         <th scope="col">{{ __('Visa Type') }}</th>
+                        <th scope="col">{{ __('Country') }}</th>
+                        <th scope="col">{{ __('Unit Price') }}</th>
                         <th scope="col">{{ __('Paid') }}</th>
                         <th scope="col">{{ __('Due') }}</th>
+                        <th scope="col">{{ __('Refund') }}</th>
+                        <th scope="col">{{ __('Attachment') }}</th>
                         <th scope="col">{{ __('Status') }}</th>
                         <th scope="col">{{ __('Ticket') }}</th>
 
@@ -143,6 +181,7 @@
                         <tr>
                             <th scope="row">{{ $index + 1 }}</th>
                             <td>{{ $result->client_name }}</td>
+                            <td>{{ $result->unique_code }}</td>
                             <td>{{ $result->passport_no }}</td>
                             <td>
                                 @if ($result->visa_type == "WV")
@@ -157,8 +196,43 @@
                                     Other Visa
                                 @endif
                             </td>
+                            <td>{{ $result->country_name }}</td>
+                            <td>{{ $result->unit_price }}</td>
                             <td>{{ $result->amount_paid }}</td>
                             <td>{{ $result->amount_due }}</td>
+                            <td>{{ $result->refund }}</td>
+                            <td>
+                            @if (!empty($result->attachment) || !empty($result->attachment2) || !empty($result->attachmen3) || !empty($result->attachment4))
+                                          
+                                        @if (!empty($result->attachment)) 
+
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Passport" href="{{ asset(Storage::url($result->attachment)) }}" class="text-body" download>
+                                                <i class="fas fa-passport"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment2)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Photo" href="{{ asset(Storage::url($result->attachment2)) }}" class="text-body" download>
+                                                <i class="fas fa-file-image"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachmen3)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="PCC" href="{{ asset(Storage::url($result->attachmen3)) }}" class="text-body" download>
+                                                <i class="fas fa-file"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @if (!empty($result->attachment4)) 
+                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" title="Others" href="{{ asset(Storage::url($result->attachment4)) }}" class="text-body" download>
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        
+                                        @endif
+                                        @else
+                                            <i class="fas fa-times"></i>
+                                        @endif
+                                    </td>
                             <td>{{ $result->status }}</td>
                             <td>@if ($result->isTicket == 1)
                                     Yes
